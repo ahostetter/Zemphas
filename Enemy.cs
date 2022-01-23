@@ -16,6 +16,5 @@ namespace Zemphas
             health = aHealth;
             damage = aDamage;
         }
-
     }
 }

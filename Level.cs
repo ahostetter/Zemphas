@@ -9,7 +9,7 @@ namespace Zemphas
     internal class Level
     {
         public static bool complete;
-        public static Hero zemphas = new Hero("Zemphas", 2000, 100, .5, .2, .4);
+        public static Hero zemphas = new Hero("Zemphas", 2000, 200, .8, .5, .4);
         public static Inventory heroInventory = new Inventory(new Sword("Dull Blade", 20, "dagger", "None"), 3);
 
         public static void Level1()
