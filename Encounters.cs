@@ -8,20 +8,49 @@ namespace Zemphas
 {
     internal class Encounters
     {
-        public static void OgreEncounter(Inventory heroInventory, Hero zemphas)
+        //public Inventory encounterInventory;
+        //public Hero encounterHero;
+        //
+        //public Encounters(Inventory aEncounterInventory, Hero aEncounterHero)
+        //{
+        //    encounterInventory = aEncounterInventory;
+        //    encounterHero = aEncounterHero;
+        //}
+
+        public static void randomEcounter(Inventory encounterInventory, Hero encounterHero)
+        {
+            Random random = new Random();
+            int userRoll = random.Next(1, 10);
+
+            if (userRoll <= 3)
+            {
+                OgreEncounter(encounterInventory, encounterHero);
+            }
+            else if (userRoll > 3 && userRoll < 7)
+            {
+                Console.WriteLine("Another Encounter goes here 2");
+            }
+            else
+            {
+                Console.WriteLine("Another Encounter goes here 3");
+            }
+
+        }
+
+        public static void OgreEncounter(Inventory heroInventory, Hero hero)
         {
             Random rnd = new Random();
             Enemy Ogre = new Enemy(rnd.Next(1500, 2000), rnd.Next(200, 300));
             int userChoice = 0;
             int chanceScale = 10;
-            int critDamage = (int)(zemphas.damage * zemphas.criticalDamage);
+            int critDamage = (int)(hero.damage * hero.criticalDamage);
 
             Console.WriteLine("You stand before a hulking giant of a Ogre");
             Console.WriteLine();
 
             int orgeHealth = Ogre.health;
-            int heroHealth = zemphas.health;
-            int heroDamage = heroInventory.sword.damage + zemphas.damage;
+            int heroHealth = hero.health;
+            int heroDamage = heroInventory.sword.damage + hero.damage;
             bool escape = false;
 
             while (orgeHealth > 0 && escape == false && heroHealth > 0)
@@ -36,7 +65,7 @@ namespace Zemphas
                     {
                         int userCritChance = rnd.Next(1, chanceScale);
                         //Console.WriteLine(userCritChance.ToString());
-                        if ((chanceScale - chanceScale * zemphas.criticalChance) < userCritChance)
+                        if ((chanceScale - chanceScale * hero.criticalChance) < userCritChance)
                         {
                             orgeHealth = (int)(orgeHealth - (critDamage + heroDamage));
                             Console.WriteLine("Hero attacks the Ogre (" + (heroDamage + critDamage) + " HIT POINTS!)");
@@ -65,7 +94,7 @@ namespace Zemphas
                     {
                         int userEscapeChance = rnd.Next(1, chanceScale);
                         //Console.WriteLine(userEscapeChance.ToString());
-                        if ((chanceScale - chanceScale * zemphas.evasiveness) < userEscapeChance)
+                        if ((chanceScale - chanceScale * hero.evasiveness) < userEscapeChance)
                         {
                             escape = true;
                         }

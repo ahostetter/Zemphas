@@ -9,10 +9,10 @@ namespace Zemphas
     internal class Level
     {
         public static bool complete;
-        public static Hero zemphas = new Hero("Zemphas", 2000, 200, .8, .5, .4);
-        public static Inventory heroInventory = new Inventory(new Sword("Dull Blade", 20, "dagger", "None"), 3);
+        //public static Hero zemphas = new Hero("Zemphas", 2000, 200, .8, .5, .4);
+        //public static Inventory zemphasInventory = new Inventory(new Sword("Dull Blade", 20, "dagger", "None"), 3);
 
-        public static void Level1()
+        public static void Level1(Inventory heroInventory, Hero hero)
         {
             complete = false;
 
@@ -56,12 +56,12 @@ namespace Zemphas
 
                 Console.WriteLine("You keep walking but you notice something is near you.");
 
-                Encounters.OgreEncounter(heroInventory, zemphas);
+                Encounters.randomEcounter(heroInventory, hero);
                 complete = true;
             }
         }
 
-        public static void Level2()
+        public static void Level2(Inventory heroInventory, Hero hero)
         {
             Console.WriteLine(heroInventory.sword.name);
         }
