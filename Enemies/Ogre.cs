@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zemphas
+namespace Zemphas.Enemies
 {
-    internal class Warlock : Enemy
+    internal class Ogre : Enemy
     {
 
-        Random random = new Random();
-
-        public Warlock(int aHealth, int aDamage) : base(aHealth, aDamage)
+        public Ogre(int aHealth, int aDamage) : base(aHealth, aDamage)
         {
             health = aHealth;
             damage = aDamage;
         }
+
     }
 }

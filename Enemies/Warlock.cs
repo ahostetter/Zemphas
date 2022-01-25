@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zemphas
+namespace Zemphas.Enemies
 {
-    internal class Enemy
+    internal class Warlock : Enemy
     {
-        public int health;
-        public int damage;
-
-        public Enemy(int aHealth, int aDamage)
+        public Warlock(int aHealth, int aDamage) : base(aHealth, aDamage)
         {
             health = aHealth;
             damage = aDamage;

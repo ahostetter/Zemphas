@@ -17,6 +17,7 @@ namespace Zemphas
             complete = false;
 
             Random rnd = new Random();
+            int userChoice = 0;
 
             Sword[] swords = { new Sword("Excalibar", rnd.Next(300, 500), "claymore", "Fire"), new Sword("Scorn", rnd.Next(300, 500), "rapier", "Ice") };
 
@@ -34,7 +35,7 @@ namespace Zemphas
                 {
                     Console.WriteLine("What weapon do you choose? " + swords[0].name + "[0] or " + swords[1].name + "[1]?");
 
-                    int userChoice = System.Convert.ToInt32(Console.ReadLine());
+                    userChoice = System.Convert.ToInt32(Console.ReadLine());
 
                     if (userChoice == 0)
                     {
@@ -57,6 +58,36 @@ namespace Zemphas
                 Console.WriteLine("You keep walking but you notice something is near you.");
 
                 Encounters.randomEcounter(heroInventory, hero);
+
+                Console.WriteLine("After defeating the monster you see that there is two paths you can take.");
+                Console.WriteLine("One way leads down a path with shimmering light that you are sure has some sort of treasure.");
+                Console.WriteLine("The other is the way out of the cave.");
+
+                i = 0;
+
+                while (i == 0)
+                {
+                    Console.WriteLine("Path of shimmering light [0] or exit the cave? [1]");
+
+                    userChoice = System.Convert.ToInt32(Console.ReadLine());
+
+                    if (userChoice == 0)
+                    {
+                        Console.WriteLine("You head down the path of shimmering light.");
+                        Encounters.randomEcounter(heroInventory, hero);
+                        i = 1;
+                    }
+                    else if (userChoice == 1)
+                    {
+                        Console.WriteLine("You exit the cave into a forest.");
+                        i = 1;
+                    }
+                    else
+                    {
+                        Console.WriteLine("You did not put in a correct choice");
+                    }
+                }
+
                 complete = true;
             }
         }
