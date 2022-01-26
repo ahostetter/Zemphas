@@ -9,10 +9,8 @@ namespace Zemphas
     internal class Level
     {
         public static bool complete;
-        //public static Hero zemphas = new Hero("Zemphas", 2000, 200, .8, .5, .4);
-        //public static Inventory zemphasInventory = new Inventory(new Sword("Dull Blade", 20, "dagger", "None"), 3);
 
-        public static void Level1(Inventory heroInventory, Hero hero)
+        public static void Level1(Hero hero)
         {
             complete = false;
 
@@ -40,13 +38,13 @@ namespace Zemphas
                     if (userChoice == 0)
                     {
                         Console.WriteLine("You chose a blade with " + swords[0].element + " and a damage output of " + swords[0].damage);
-                        heroInventory.sword = swords[0];
+                        hero.inventory.sword = swords[0];
                         i = 1;
                     }
                     else if (userChoice == 1)
                     {
                         Console.WriteLine("You chose a blade with " + swords[1].element + " and a damage output of " + swords[1].damage);
-                        heroInventory.sword = swords[1];
+                        hero.inventory.sword = swords[1];
                         i = 1;
                     }
                     else
@@ -57,11 +55,12 @@ namespace Zemphas
 
                 Console.WriteLine("You keep walking but you notice something is near you.");
 
-                Encounters.randomEcounter(heroInventory, hero);
+                Encounters.randomEcounter(hero);
 
-                Console.WriteLine("After defeating the monster you see that there is two paths you can take.");
+                Console.WriteLine("You see that there are two paths you can take.");
                 Console.WriteLine("One way leads down a path with shimmering light that you are sure has some sort of treasure.");
-                Console.WriteLine("The other is the way out of the cave.");
+                Console.WriteLine("The other is the way out of the cave. Which way will you go?");
+                Console.WriteLine();
 
                 i = 0;
 
@@ -74,7 +73,7 @@ namespace Zemphas
                     if (userChoice == 0)
                     {
                         Console.WriteLine("You head down the path of shimmering light.");
-                        Encounters.randomEcounter(heroInventory, hero);
+                        Encounters.randomEcounter(hero);
                         i = 1;
                     }
                     else if (userChoice == 1)

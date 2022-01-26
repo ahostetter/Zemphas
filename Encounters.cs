@@ -9,29 +9,29 @@ namespace Zemphas
 {
     internal class Encounters
     {
-        public static void randomEcounter(Inventory encounterInventory, Hero encounterHero)
+        public static void randomEcounter(Hero encounterHero)
         {
             Random random = new Random();
             int userRoll = random.Next(1, 10);
 
             if (userRoll <= 3)
             {
-                OgreEncounter(encounterInventory, encounterHero);
+                OgreEncounter(encounterHero);
             }
             else if (userRoll > 3 && userRoll < 7)
             {
                 Console.WriteLine("Another Encounter goes here 2");
-                OgreEncounter(encounterInventory, encounterHero);
+                OgreEncounter(encounterHero);
             }
             else
             {
                 Console.WriteLine("Another Encounter goes here 3");
-                OgreEncounter(encounterInventory, encounterHero);
+                OgreEncounter(encounterHero);
             }
 
         }
 
-        public static void OgreEncounter(Inventory heroInventory, Hero hero)
+        public static void OgreEncounter(Hero hero)
         {
             Random rnd = new Random();
             Ogre ogre = new Ogre(rnd.Next(1500, 2000), rnd.Next(200, 300));
@@ -44,7 +44,7 @@ namespace Zemphas
 
             int orgeHealth = ogre.health;
             int heroHealth = hero.health;
-            int heroDamage = heroInventory.sword.damage + hero.damage;
+            int heroDamage = hero.inventory.sword.damage + hero.damage;
             bool escape = false;
 
             while (orgeHealth > 0 && escape == false && heroHealth > 0)
@@ -130,6 +130,7 @@ namespace Zemphas
                 Console.WriteLine("You defeated the Ogre!!!");
                 heroHealth = heroHealth + 300;
                 Console.WriteLine("It drops a health potion which brings your health up to " + heroHealth);
+                Console.WriteLine();
             }
         }
     }

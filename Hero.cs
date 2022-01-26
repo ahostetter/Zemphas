@@ -14,8 +14,9 @@ namespace Zemphas
         public double criticalChance;
         public double criticalDamage;
         public double evasiveness;
+        public Inventory inventory;
 
-        public Hero(string aName, int aHealth, int aDamage, double aCriticalChance, double aCriticalDamage, double aEvasiveness)
+        public Hero(string aName, int aHealth, int aDamage, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory)
         {
             name = aName;
             health = aHealth;
@@ -23,6 +24,7 @@ namespace Zemphas
             criticalChance = aCriticalChance;
             criticalDamage = aCriticalDamage;
             evasiveness = aEvasiveness;
+            inventory = aInventory;
         }
     }
 }
