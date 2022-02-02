@@ -20,8 +20,7 @@ namespace Zemphas
             }
             else if (userRoll > 3 && userRoll < 7)
             {
-                Console.WriteLine("Another Encounter goes here 2");
-                OgreEncounter(encounterHero);
+                WarlockEncounter(encounterHero);
             }
             else
             {
@@ -81,7 +80,7 @@ namespace Zemphas
                         }
                         else
                         {
-                            Console.WriteLine("The Ogre collapsed");
+                            Console.WriteLine("The Ogre collapsed!");
                         }
                     }
                     else if (userChoice == 1)
@@ -129,6 +128,109 @@ namespace Zemphas
             {
                 Console.WriteLine("You defeated the Ogre!!!");
                 heroHealth = heroHealth + 300;
+                Console.WriteLine("It drops a health potion which brings your health up to " + heroHealth);
+                Console.WriteLine();
+            }
+        }
+
+        public static void WarlockEncounter(Hero hero)
+        {
+            Random rnd = new Random();
+            Warlock warlock = new Warlock(rnd.Next(800, 1000), rnd.Next(500, 800));
+            int userChoice = 0;
+            int chanceScale = 10;
+            int critDamage = (int)(hero.damage * hero.criticalDamage);
+
+            Console.WriteLine("You see the red crazy eyes of Warlock as it conjures a spell meant for you");
+            Console.WriteLine();
+
+            int warlockHealth = warlock.health;
+            int heroHealth = hero.health;
+            int heroDamage = hero.inventory.sword.damage + hero.damage;
+            bool escape = false;
+
+            while (warlockHealth > 0 && escape == false && heroHealth > 0)
+            {
+
+                Console.WriteLine("What will you do? Attack with your Sword [0] or attempt to escape? [1]");
+                userChoice = Convert.ToInt32(Console.ReadLine());
+
+                if (heroHealth > 0)
+                {
+                    if (userChoice == 0)
+                    {
+                        int userCritChance = rnd.Next(1, chanceScale);
+                        //Console.WriteLine(userCritChance.ToString());
+                        if ((chanceScale - chanceScale * hero.criticalChance) < userCritChance)
+                        {
+                            warlockHealth = (int)(warlockHealth - (critDamage + heroDamage));
+                            Console.WriteLine("Hero attacks the warlock (" + (heroDamage + critDamage) + " HIT POINTS!)");
+                            Console.WriteLine("IT IS A CRITICAL HIT!!!!");
+                        }
+                        else
+                        {
+                            warlockHealth = warlockHealth - heroDamage;
+                            Console.WriteLine("Hero attacks the warlock (" + heroDamage + " HIT POINTS!)");
+                        }
+                        if (warlockHealth > 0)
+                        {
+                            Console.WriteLine("The warlock has " + warlockHealth + " health now");
+                            Console.WriteLine();
+                            Console.WriteLine("The warlock sends a bolt of lightning your way");
+                            heroHealth = heroHealth - warlock.damage;
+                            Console.WriteLine("You take " + warlock.damage + " damage which leaves you with " + heroHealth + " health");
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            Console.WriteLine("The warlock collapsed!");
+                        }
+                    }
+                    else if (userChoice == 1)
+                    {
+                        int userEscapeChance = rnd.Next(1, chanceScale);
+                        //Console.WriteLine(userEscapeChance.ToString());
+                        if ((chanceScale - chanceScale * hero.evasiveness) < userEscapeChance)
+                        {
+                            escape = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("You were not able to escape!");
+                            Console.WriteLine();
+                            Console.WriteLine("The warlock sends a cone of frozen air your way");
+                            heroHealth = heroHealth - warlock.damage;
+                            Console.WriteLine("You take " + warlock.damage + " damage");
+                            if (heroHealth <= 0)
+                            {
+                                Console.WriteLine("The warlock was too much for you.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("You have " + heroHealth + " left");
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("That is not a valid option");
+                    }
+                }
+            }
+
+            if (escape)
+            {
+                Console.WriteLine("You successfully escaped!");
+            }
+            else if (heroHealth <= 0)
+            {
+                Console.WriteLine("You perished");
+            }
+            else
+            {
+                Console.WriteLine("You defeated the Warlock!!!");
+                heroHealth = heroHealth + 500;
                 Console.WriteLine("It drops a health potion which brings your health up to " + heroHealth);
                 Console.WriteLine();
             }
