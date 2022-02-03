@@ -30,49 +30,31 @@ namespace Zemphas
 
         }
 
-        public static Hero heroLevelCheck(Hero hero, int xp)
-        {
-            hero.xp = hero.xp + xp;
-
-            if (hero.xp >= 100)
-            {
-                hero.level = hero.level + 1;
-                hero.xp = hero.xp - 100;
-                HeroDamageCheck(hero);
-            }
-            return hero;
-        }
-
-        public static void HeroDamageCheck(Hero hero)
-        {
-            hero.currentDamage = (hero.baseDamage + (hero.level*.1)*hero.baseDamage) + hero.inventory.sword.damage;
-            Console.WriteLine(hero.currentDamage);
-        }
-
         public static void OgreEncounter(Hero hero)
         {
             Random rnd = new Random();
             Ogre ogre = new Ogre(rnd.Next(1500, 2000), rnd.Next(200, 300));
-            HeroDamageCheck(hero);
+            HeroManagement.HeroDamageCheck(hero);
             int userChoice = 0;
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
+
+            HeroManagement.HeroStats(hero);
 
             Console.WriteLine("You stand before a hulking giant of a Ogre");
             Console.WriteLine();
 
             double orgeHealth = ogre.health;
-            double heroHealth = hero.health;
             double heroDamage = hero.currentDamage;
             bool escape = false;
 
-            while (orgeHealth > 0 && escape == false && heroHealth > 0)
+            while (orgeHealth > 0 && escape == false && hero.health > 0)
             {
 
                 Console.WriteLine("What will you do? Attack with your Sword [0] or attempt to escape? [1]");
                 userChoice = Convert.ToInt32(Console.ReadLine());
 
-                if (heroHealth > 0)
+                if (hero.health > 0)
                 {
                     if (userChoice == 0)
                     {
@@ -94,8 +76,8 @@ namespace Zemphas
                             Console.WriteLine("The Ogre has " + orgeHealth + " health now");
                             Console.WriteLine();
                             Console.WriteLine("The Ogre swings his club at you");
-                            heroHealth = heroHealth - ogre.damage;
-                            Console.WriteLine("You take " + ogre.damage + " damage which leaves you with " + heroHealth + " health");
+                            hero.health = hero.health - ogre.damage;
+                            Console.WriteLine("You take " + ogre.damage + " damage which leaves you with " + hero.health + " health");
                             Console.WriteLine();
                         }
                         else
@@ -116,15 +98,15 @@ namespace Zemphas
                             Console.WriteLine("You were not able to escape!");
                             Console.WriteLine();
                             Console.WriteLine("The Ogre swings his club at you");
-                            heroHealth = heroHealth - ogre.damage;
+                            hero.health = hero.health - ogre.damage;
                             Console.WriteLine("You take " + ogre.damage + " damage");
-                            if (heroHealth <= 0)
+                            if (hero.health <= 0)
                             {
                                 Console.WriteLine("The Ogre is too much for you.");
                             }
                             else
                             {
-                                Console.WriteLine("You have " + heroHealth + " left");
+                                Console.WriteLine("You have " + hero.health + " left");
                             }
                             Console.WriteLine();
                         }
@@ -140,18 +122,18 @@ namespace Zemphas
             {
                 Console.WriteLine("You successfully escaped!");
             }
-            else if (heroHealth <= 0)
+            else if (hero.health <= 0)
             {
                 Console.WriteLine("You perished");
             }
             else
             {
                 Console.WriteLine("You defeated the Ogre!!!");
-                heroHealth = heroHealth + 300;
-                heroLevelCheck(hero, 100);
+                HeroManagement.HeroLevelCheck(hero, 100);
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
-                Console.WriteLine("It drops a health potion which brings your health up to " + heroHealth);
+                HeroManagement.HeroDamageCheck(hero);
+                HeroManagement.HeroPickupHealth(hero);
                 Console.WriteLine();
             }
         }
@@ -160,26 +142,27 @@ namespace Zemphas
         {
             Random rnd = new Random();
             Warlock warlock = new Warlock(rnd.Next(800, 1000), rnd.Next(500, 800));
-            HeroDamageCheck(hero);
+            HeroManagement.HeroDamageCheck(hero);
             int userChoice = 0;
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
+
+            HeroManagement.HeroStats(hero);
 
             Console.WriteLine("You see the red crazy eyes of Warlock as it conjures a spell meant for you");
             Console.WriteLine();
 
             double warlockHealth = warlock.health;
-            double heroHealth = hero.health;
             double heroDamage = hero.currentDamage;
             bool escape = false;
 
-            while (warlockHealth > 0 && escape == false && heroHealth > 0)
+            while (warlockHealth > 0 && escape == false && hero.health > 0)
             {
 
                 Console.WriteLine("What will you do? Attack with your Sword [0] or attempt to escape? [1]");
                 userChoice = Convert.ToInt32(Console.ReadLine());
 
-                if (heroHealth > 0)
+                if (hero.health > 0)
                 {
                     if (userChoice == 0)
                     {
@@ -201,8 +184,8 @@ namespace Zemphas
                             Console.WriteLine("The warlock has " + warlockHealth + " health now");
                             Console.WriteLine();
                             Console.WriteLine("The warlock sends a bolt of lightning your way");
-                            heroHealth = heroHealth - warlock.damage;
-                            Console.WriteLine("You take " + warlock.damage + " damage which leaves you with " + heroHealth + " health");
+                            hero.health = hero.health - warlock.damage;
+                            Console.WriteLine("You take " + warlock.damage + " damage which leaves you with " + hero.health + " health");
                             Console.WriteLine();
                         }
                         else
@@ -223,15 +206,15 @@ namespace Zemphas
                             Console.WriteLine("You were not able to escape!");
                             Console.WriteLine();
                             Console.WriteLine("The warlock sends a cone of frozen air your way");
-                            heroHealth = heroHealth - warlock.damage;
+                            hero.health = hero.health - warlock.damage;
                             Console.WriteLine("You take " + warlock.damage + " damage");
-                            if (heroHealth <= 0)
+                            if (hero.health <= 0)
                             {
                                 Console.WriteLine("The warlock was too much for you.");
                             }
                             else
                             {
-                                Console.WriteLine("You have " + heroHealth + " left");
+                                Console.WriteLine("You have " + hero.health + " left");
                             }
                             Console.WriteLine();
                         }
@@ -247,18 +230,18 @@ namespace Zemphas
             {
                 Console.WriteLine("You successfully escaped!");
             }
-            else if (heroHealth <= 0)
+            else if (hero.health <= 0)
             {
                 Console.WriteLine("You perished");
             }
             else
             {
                 Console.WriteLine("You defeated the Warlock!!!");
-                heroHealth = heroHealth + 500;
-                heroLevelCheck(hero, 100);
+                HeroManagement.HeroLevelCheck(hero, 100);
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
-                Console.WriteLine("It drops a health potion which brings your health up to " + heroHealth);
+                HeroManagement.HeroDamageCheck(hero);
+                HeroManagement.HeroPickupHealth(hero);
                 Console.WriteLine();
             }
         }
