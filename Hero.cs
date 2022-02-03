@@ -11,16 +11,20 @@ namespace Zemphas
         public string name;
         public int health;
         public int damage;
+        public int level;
+        public int xp;
         public double criticalChance;
         public double criticalDamage;
         public double evasiveness;
         public Inventory inventory;
 
-        public Hero(string aName, int aHealth, int aDamage, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory)
+        public Hero(string aName, int aHealth, int aDamage, int aLevel, int aXP, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory)
         {
             name = aName;
             health = aHealth;
             damage = aDamage;
+            level = aLevel;
+            xp = aXP;
             criticalChance = aCriticalChance;
             criticalDamage = aCriticalDamage;
             evasiveness = aEvasiveness;

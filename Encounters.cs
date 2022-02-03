@@ -30,6 +30,18 @@ namespace Zemphas
 
         }
 
+        public static Hero heroLevelCheck(Hero hero, int xp)
+        {
+            hero.xp = hero.xp + xp;
+
+            if (hero.xp >= 100)
+            {
+                hero.level = hero.level + 1;
+                hero.xp = hero.xp - 100;
+            }
+            return hero;
+        }
+
         public static void OgreEncounter(Hero hero)
         {
             Random rnd = new Random();
@@ -128,6 +140,9 @@ namespace Zemphas
             {
                 Console.WriteLine("You defeated the Ogre!!!");
                 heroHealth = heroHealth + 300;
+                heroLevelCheck(hero, 25);
+                Console.WriteLine(hero.level);
+                Console.WriteLine(hero.xp);
                 Console.WriteLine("It drops a health potion which brings your health up to " + heroHealth);
                 Console.WriteLine();
             }
@@ -218,7 +233,7 @@ namespace Zemphas
                     }
                 }
             }
-
+            
             if (escape)
             {
                 Console.WriteLine("You successfully escaped!");
@@ -231,6 +246,9 @@ namespace Zemphas
             {
                 Console.WriteLine("You defeated the Warlock!!!");
                 heroHealth = heroHealth + 500;
+                heroLevelCheck(hero, 75);
+                Console.WriteLine(hero.level);
+                Console.WriteLine(hero.xp);
                 Console.WriteLine("It drops a health potion which brings your health up to " + heroHealth);
                 Console.WriteLine();
             }
