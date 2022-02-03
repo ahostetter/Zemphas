@@ -9,11 +9,11 @@ namespace Zemphas
     internal class Sword
     {
         public string name;
-        public int damage;
+        public double damage;
         public string type;
         public string element;
 
-        public Sword(string aName, int aDamage, string aType, string aElement)
+        public Sword(string aName, double aDamage, string aType, string aElement)
         {
             name = aName;
             damage = aDamage;

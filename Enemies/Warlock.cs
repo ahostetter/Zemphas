@@ -8,7 +8,7 @@ namespace Zemphas.Enemies
 {
     internal class Warlock : Enemy
     {
-        public Warlock(int aHealth, int aDamage) : base(aHealth, aDamage)
+        public Warlock(double aHealth, double aDamage) : base(aHealth, aDamage)
         {
             health = aHealth;
             damage = aDamage;

@@ -38,24 +38,32 @@ namespace Zemphas
             {
                 hero.level = hero.level + 1;
                 hero.xp = hero.xp - 100;
+                HeroDamageCheck(hero);
             }
             return hero;
+        }
+
+        public static void HeroDamageCheck(Hero hero)
+        {
+            hero.currentDamage = (hero.baseDamage + (hero.level*.1)*hero.baseDamage) + hero.inventory.sword.damage;
+            Console.WriteLine(hero.currentDamage);
         }
 
         public static void OgreEncounter(Hero hero)
         {
             Random rnd = new Random();
             Ogre ogre = new Ogre(rnd.Next(1500, 2000), rnd.Next(200, 300));
+            HeroDamageCheck(hero);
             int userChoice = 0;
             int chanceScale = 10;
-            int critDamage = (int)(hero.damage * hero.criticalDamage);
+            double critDamage = hero.currentDamage * hero.criticalDamage;
 
             Console.WriteLine("You stand before a hulking giant of a Ogre");
             Console.WriteLine();
 
-            int orgeHealth = ogre.health;
-            int heroHealth = hero.health;
-            int heroDamage = hero.inventory.sword.damage + hero.damage;
+            double orgeHealth = ogre.health;
+            double heroHealth = hero.health;
+            double heroDamage = hero.currentDamage;
             bool escape = false;
 
             while (orgeHealth > 0 && escape == false && heroHealth > 0)
@@ -140,7 +148,7 @@ namespace Zemphas
             {
                 Console.WriteLine("You defeated the Ogre!!!");
                 heroHealth = heroHealth + 300;
-                heroLevelCheck(hero, 25);
+                heroLevelCheck(hero, 100);
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
                 Console.WriteLine("It drops a health potion which brings your health up to " + heroHealth);
@@ -152,16 +160,17 @@ namespace Zemphas
         {
             Random rnd = new Random();
             Warlock warlock = new Warlock(rnd.Next(800, 1000), rnd.Next(500, 800));
+            HeroDamageCheck(hero);
             int userChoice = 0;
             int chanceScale = 10;
-            int critDamage = (int)(hero.damage * hero.criticalDamage);
+            double critDamage = hero.currentDamage * hero.criticalDamage;
 
             Console.WriteLine("You see the red crazy eyes of Warlock as it conjures a spell meant for you");
             Console.WriteLine();
 
-            int warlockHealth = warlock.health;
-            int heroHealth = hero.health;
-            int heroDamage = hero.inventory.sword.damage + hero.damage;
+            double warlockHealth = warlock.health;
+            double heroHealth = hero.health;
+            double heroDamage = hero.currentDamage;
             bool escape = false;
 
             while (warlockHealth > 0 && escape == false && heroHealth > 0)
@@ -246,7 +255,7 @@ namespace Zemphas
             {
                 Console.WriteLine("You defeated the Warlock!!!");
                 heroHealth = heroHealth + 500;
-                heroLevelCheck(hero, 75);
+                heroLevelCheck(hero, 100);
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
                 Console.WriteLine("It drops a health potion which brings your health up to " + heroHealth);

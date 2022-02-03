@@ -9,20 +9,22 @@ namespace Zemphas
     internal class Hero
     {
         public string name;
-        public int health;
-        public int damage;
-        public int level;
+        public double health;
+        public double currentDamage;
+        public double baseDamage;
+        public double level;
         public int xp;
         public double criticalChance;
         public double criticalDamage;
         public double evasiveness;
         public Inventory inventory;
 
-        public Hero(string aName, int aHealth, int aDamage, int aLevel, int aXP, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory)
+        public Hero(string aName, double aHealth, double aCurrentDamage, double aBaseDamage, double aLevel, int aXP, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory)
         {
             name = aName;
             health = aHealth;
-            damage = aDamage;
+            currentDamage = aCurrentDamage;
+            baseDamage = aBaseDamage;
             level = aLevel;
             xp = aXP;
             criticalChance = aCriticalChance;

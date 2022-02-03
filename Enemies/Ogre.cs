@@ -9,7 +9,7 @@ namespace Zemphas.Enemies
     internal class Ogre : Enemy
     {
 
-        public Ogre(int aHealth, int aDamage) : base(aHealth, aDamage)
+        public Ogre(double aHealth, double aDamage) : base(aHealth, aDamage)
         {
             health = aHealth;
             damage = aDamage;

@@ -8,10 +8,10 @@ namespace Zemphas.Enemies
 {
     internal class Enemy
     {
-        public int health;
-        public int damage;
+        public double health;
+        public double damage;
 
-        public Enemy(int aHealth, int aDamage)
+        public Enemy(double aHealth, double aDamage)
         {
             health = aHealth;
             damage = aDamage;
