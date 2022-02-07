@@ -8,7 +8,7 @@ namespace Zemphas
 {
     internal class HeroManagement
     {
-        public static Hero HeroLevelCheck(Hero hero, int xp)
+        public static void HeroLevelCheck(Hero hero, int xp)
         {
             hero.xp = hero.xp + xp;
 
@@ -17,7 +17,6 @@ namespace Zemphas
                 hero.level = hero.level + 1;
                 hero.xp = hero.xp - 100;
             }
-            return hero;
         }
 
         public static void HeroDamageCheck(Hero hero)
@@ -25,11 +24,16 @@ namespace Zemphas
             hero.currentDamage = (hero.baseDamage + (hero.level * .1) * hero.baseDamage) + hero.inventory.sword.damage;
         }
 
-        public static void HeroPickupHealth(Hero hero)
+        public static void HeroPickupItem(Hero hero)
         {
-            Console.WriteLine("You find a health potion on the ground");
-            hero.inventory.healthPotion = hero.inventory.healthPotion + 1;
-            Console.WriteLine("You now have " + hero.inventory.healthPotion + " Health Potions in your Inventory.");
+            Console.WriteLine("You find something.");
+
+            if (Inventory.inventorySpaceCheck(hero.inventory))
+            {
+                Console.WriteLine("It's a health potion");
+                hero.inventory.healthPotion = hero.inventory.healthPotion + 1;
+                Console.WriteLine("You now have " + hero.inventory.healthPotion + " Health Potions in your Inventory.");
+            }
         }
 
         public static void HeroUseHealth(Hero hero)
@@ -41,6 +45,7 @@ namespace Zemphas
             else
             {
                 hero.health = hero.health + 300;
+                Console.WriteLine("You now have " + hero.health);
                 hero.inventory.healthPotion = hero.inventory.healthPotion - 1;
                 Console.WriteLine("You now have " + hero.inventory.healthPotion + " Health Potions in your Inventory.");
             }
@@ -48,7 +53,8 @@ namespace Zemphas
 
         public static void HeroStats(Hero hero)
         {
-            Console.WriteLine("|Name:" + hero.name + "|Damage:" + hero.currentDamage + "|");
+            Console.WriteLine("|Name:" + hero.name + "|Health:" + hero.health + "|Damage:" + hero.currentDamage + "|Level:" + hero.level + "|XP:" 
+                + hero.xp + "|Health Potions:" + hero.inventory.healthPotion + "|");
         }
 
     }

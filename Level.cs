@@ -16,7 +16,6 @@ namespace Zemphas
 
             Random rnd = new Random();
             int userChoice = 0;
-
             Sword[] swords = { new Sword("Excalibar", rnd.Next(300, 500), "claymore", "Fire"), new Sword("Scorn", rnd.Next(300, 500), "rapier", "Ice") };
 
             Console.WriteLine("You wake up in a dark cave and have no idea how you got there.");
@@ -33,7 +32,15 @@ namespace Zemphas
                 {
                     Console.WriteLine("What weapon do you choose? " + swords[0].name + "[0] or " + swords[1].name + "[1]?");
 
-                    userChoice = System.Convert.ToInt32(Console.ReadLine());
+                    try
+                    {
+                        userChoice = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("You did not put in a number");
+                        userChoice = 1000;
+                    }
 
                     if (userChoice == 0)
                     {
@@ -66,9 +73,18 @@ namespace Zemphas
 
                 while (i == 0)
                 {
-                    Console.WriteLine("Path of shimmering light [0] or exit the cave? [1]");
 
-                    userChoice = System.Convert.ToInt32(Console.ReadLine());
+                    try
+                    {
+                        Console.WriteLine("Path of shimmering light [0] or exit the cave? [1]");
+
+                        userChoice = System.Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("You did not put in a number");
+                        userChoice = 1000;
+                    }
 
                     if (userChoice == 0)
                     {

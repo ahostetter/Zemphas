@@ -18,5 +18,22 @@ namespace Zemphas
             healthPotion = aHealthPotion;
             space = aSpace;
         }
+
+        public static bool inventorySpaceCheck(Inventory heroInventory)
+        {
+            int usedSpace = heroInventory.healthPotion;
+            bool doYouHaveSpace = true;
+
+            if (heroInventory.space > usedSpace)
+            {
+                doYouHaveSpace = true;
+            }
+            else
+            {
+                Console.WriteLine("You don't have enough room in your inventory. You have to leave the item behind.");
+                doYouHaveSpace = false;
+            }
+            return doYouHaveSpace;
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace Zemphas
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
 
-            HeroManagement.HeroStats(hero);
+            //HeroManagement.HeroStats(hero);
 
             Console.WriteLine("You stand before a hulking giant of a Ogre");
             Console.WriteLine();
@@ -51,8 +51,22 @@ namespace Zemphas
             while (orgeHealth > 0 && escape == false && hero.health > 0)
             {
 
-                Console.WriteLine("What will you do? Attack with your Sword [0] or attempt to escape? [1]");
-                userChoice = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("What will you do?");
+                Console.WriteLine();
+                Console.WriteLine("Attack with your Sword [0]");
+                Console.WriteLine("Try to Escape [1]");
+                Console.WriteLine("Use health potion [2]");
+                Console.WriteLine("Check Hero Stats [3]");
+
+                try
+                {
+                    userChoice = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("You did not put in a number");
+                    userChoice = 1000;
+                }
 
                 if (hero.health > 0)
                 {
@@ -111,6 +125,14 @@ namespace Zemphas
                             Console.WriteLine();
                         }
                     }
+                    else if (userChoice == 2)
+                    {
+                        HeroManagement.HeroUseHealth(hero);
+                    }
+                    else if (userChoice == 3)
+                    {
+                        HeroManagement.HeroStats(hero);
+                    }
                     else
                     {
                         Console.WriteLine("That is not a valid option");
@@ -129,11 +151,11 @@ namespace Zemphas
             else
             {
                 Console.WriteLine("You defeated the Ogre!!!");
-                HeroManagement.HeroLevelCheck(hero, 100);
+                HeroManagement.HeroLevelCheck(hero, 50);
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
                 HeroManagement.HeroDamageCheck(hero);
-                HeroManagement.HeroPickupHealth(hero);
+                HeroManagement.HeroPickupItem(hero);
                 Console.WriteLine();
             }
         }
@@ -147,7 +169,7 @@ namespace Zemphas
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
 
-            HeroManagement.HeroStats(hero);
+            //HeroManagement.HeroStats(hero);
 
             Console.WriteLine("You see the red crazy eyes of Warlock as it conjures a spell meant for you");
             Console.WriteLine();
@@ -159,8 +181,22 @@ namespace Zemphas
             while (warlockHealth > 0 && escape == false && hero.health > 0)
             {
 
-                Console.WriteLine("What will you do? Attack with your Sword [0] or attempt to escape? [1]");
-                userChoice = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("What will you do?");
+                Console.WriteLine();
+                Console.WriteLine("Attack with your Sword [0]");
+                Console.WriteLine("Try to Escape [1]");
+                Console.WriteLine("Use health potion [2]");
+                Console.WriteLine("Check Hero Stats [3]");
+
+                try
+                {
+                    userChoice = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("You did not put in a number");
+                    userChoice = 1000;
+                }
 
                 if (hero.health > 0)
                 {
@@ -219,6 +255,14 @@ namespace Zemphas
                             Console.WriteLine();
                         }
                     }
+                    else if (userChoice == 2)
+                    {
+                        HeroManagement.HeroUseHealth(hero);
+                    }
+                    else if (userChoice == 3)
+                    {
+                        HeroManagement.HeroStats(hero);
+                    }
                     else
                     {
                         Console.WriteLine("That is not a valid option");
@@ -237,11 +281,11 @@ namespace Zemphas
             else
             {
                 Console.WriteLine("You defeated the Warlock!!!");
-                HeroManagement.HeroLevelCheck(hero, 100);
+                HeroManagement.HeroLevelCheck(hero, 75);
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
                 HeroManagement.HeroDamageCheck(hero);
-                HeroManagement.HeroPickupHealth(hero);
+                HeroManagement.HeroPickupItem(hero);
                 Console.WriteLine();
             }
         }
