@@ -10,19 +10,21 @@ namespace Zemphas
     {
         public Sword sword;
         public int healthPotion;
+        public int strengthPotion;
         public int space;
 
-        public Inventory(Sword aSword, int aHealthPotion, int aSpace)
+        public Inventory(Sword aSword, int aHealthPotion, int aStrengthPotion, int aSpace)
         {
             sword = aSword;
             healthPotion = aHealthPotion;
+            strengthPotion = aStrengthPotion;
             space = aSpace;
         }
 
         public static bool inventorySpaceCheck(Inventory heroInventory)
         {
-            int usedSpace = heroInventory.healthPotion;
-            bool doYouHaveSpace = true;
+            int usedSpace = heroInventory.healthPotion + heroInventory.strengthPotion;
+            bool doYouHaveSpace;
 
             if (heroInventory.space > usedSpace)
             {

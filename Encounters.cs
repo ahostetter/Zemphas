@@ -55,14 +55,14 @@ namespace Zemphas
                 Console.WriteLine();
                 Console.WriteLine("Attack with your Sword [0]");
                 Console.WriteLine("Try to Escape [1]");
-                Console.WriteLine("Use health potion [2]");
+                Console.WriteLine("Use Item [2]");
                 Console.WriteLine("Check Hero Stats [3]");
 
                 try
                 {
                     userChoice = Convert.ToInt32(Console.ReadLine());
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Console.WriteLine("You did not put in a number");
                     userChoice = 1000;
@@ -127,7 +127,7 @@ namespace Zemphas
                     }
                     else if (userChoice == 2)
                     {
-                        HeroManagement.HeroUseHealth(hero);
+                        HeroManagement.HeroUseItem(hero);
                     }
                     else if (userChoice == 3)
                     {
@@ -185,14 +185,14 @@ namespace Zemphas
                 Console.WriteLine();
                 Console.WriteLine("Attack with your Sword [0]");
                 Console.WriteLine("Try to Escape [1]");
-                Console.WriteLine("Use health potion [2]");
+                Console.WriteLine("Use Item [2]");
                 Console.WriteLine("Check Hero Stats [3]");
 
                 try
                 {
                     userChoice = Convert.ToInt32(Console.ReadLine());
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Console.WriteLine("You did not put in a number");
                     userChoice = 1000;
@@ -257,7 +257,7 @@ namespace Zemphas
                     }
                     else if (userChoice == 2)
                     {
-                        HeroManagement.HeroUseHealth(hero);
+                        HeroManagement.HeroUseItem(hero);
                     }
                     else if (userChoice == 3)
                     {

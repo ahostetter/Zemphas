@@ -21,7 +21,7 @@ namespace Zemphas
 
         public static void HeroDamageCheck(Hero hero)
         {
-            hero.currentDamage = (hero.baseDamage + (hero.level * .1) * hero.baseDamage) + hero.inventory.sword.damage;
+            hero.currentDamage = (hero.baseDamage + (hero.level * Modifiers.scaleLevel()) * hero.baseDamage) + hero.inventory.sword.damage + (hero.strength * Modifiers.scaleStrength());
         }
 
         public static void HeroPickupItem(Hero hero)
@@ -30,24 +30,76 @@ namespace Zemphas
 
             if (Inventory.inventorySpaceCheck(hero.inventory))
             {
-                Console.WriteLine("It's a health potion");
-                hero.inventory.healthPotion = hero.inventory.healthPotion + 1;
-                Console.WriteLine("You now have " + hero.inventory.healthPotion + " Health Potions in your Inventory.");
+                Random rand = new Random();
+
+                int randomItem = rand.Next(0, 2);
+
+                if (randomItem == 0)
+                {
+                    Console.WriteLine("It's a Health potion");
+                    hero.inventory.healthPotion = hero.inventory.healthPotion + 1;
+                    Console.WriteLine("You now have " + hero.inventory.healthPotion + " Health Potions in your Inventory.");
+                }
+                else if (randomItem == 1)
+                {
+                    Console.WriteLine("It's a Strength potion");
+                    hero.inventory.strengthPotion = hero.inventory.strengthPotion + 1;
+                    Console.WriteLine("You now have " + hero.inventory.strengthPotion + " Strength Potions in your Inventory.");
+                }
             }
         }
 
-        public static void HeroUseHealth(Hero hero)
+        public static void HeroUseItem(Hero hero)
         {
-            if (hero.inventory.healthPotion <= 0)
+            int userChoice = 1000;
+
+            while (userChoice != 0)
             {
-                Console.WriteLine("You can't use a Health Potion because you don't have any!!");
-            }
-            else
-            {
-                hero.health = hero.health + 300;
-                Console.WriteLine("You now have " + hero.health);
-                hero.inventory.healthPotion = hero.inventory.healthPotion - 1;
-                Console.WriteLine("You now have " + hero.inventory.healthPotion + " Health Potions in your Inventory.");
+                userChoice = 1000;
+
+                Console.WriteLine("What item do you want to use?");
+                Console.WriteLine();
+                Console.WriteLine("Health Potion [1]");
+                Console.WriteLine("Strength Potion [2]");
+                Console.WriteLine("Exit Inventory [0]");
+
+                try
+                {
+                    userChoice = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("You did not put in a number");
+                }
+
+                if (userChoice == 1)
+                {
+                    if (hero.inventory.healthPotion <= 0)
+                    {
+                        Console.WriteLine("You can't use a Health Potion because you don't have any!!");
+                    }
+                    else
+                    {
+                        hero.health = hero.health + 300;
+                        Console.WriteLine("You now have " + hero.health + " health");
+                        hero.inventory.healthPotion = hero.inventory.healthPotion - 1;
+                        Console.WriteLine("You now have " + hero.inventory.healthPotion + " Health Potions in your Inventory.");
+                    }
+                }
+                else if (userChoice == 2)
+                {
+                    if (hero.inventory.strengthPotion <= 0)
+                    {
+                        Console.WriteLine("You can't use a Strength Potion because you don't have any!!");
+                    }
+                    else
+                    {
+                        hero.strength = hero.strength + 10;
+                        Console.WriteLine("You now have " + hero.strength + " strength");
+                        hero.inventory.strengthPotion = hero.inventory.strengthPotion - 1;
+                        Console.WriteLine("You now have " + hero.inventory.strengthPotion + " Strength Potions in your Inventory.");
+                    }
+                }
             }
         }
 

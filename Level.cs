@@ -36,7 +36,7 @@ namespace Zemphas
                     {
                         userChoice = Convert.ToInt32(Console.ReadLine());
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         Console.WriteLine("You did not put in a number");
                         userChoice = 1000;
@@ -80,7 +80,7 @@ namespace Zemphas
 
                         userChoice = System.Convert.ToInt32(Console.ReadLine());
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         Console.WriteLine("You did not put in a number");
                         userChoice = 1000;
