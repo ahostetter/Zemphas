@@ -19,8 +19,9 @@ namespace Zemphas
         public double criticalDamage;
         public double evasiveness;
         public Inventory inventory;
+        public bool alive;
 
-        public Hero(string aName, double aHealth, double aStrength, double aCurrentDamage, double aBaseDamage, double aLevel, int aXP, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory)
+        public Hero(string aName, double aHealth, double aStrength, double aCurrentDamage, double aBaseDamage, double aLevel, int aXP, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory, bool aAlive)
         {
             name = aName;
             health = aHealth;
@@ -33,6 +34,7 @@ namespace Zemphas
             criticalDamage = aCriticalDamage;
             evasiveness = aEvasiveness;
             inventory = aInventory;
+            alive = aAlive;
         }
     }
 }

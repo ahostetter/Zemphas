@@ -105,8 +105,11 @@ namespace Zemphas
 
         public static void HeroStats(Hero hero)
         {
-            Console.WriteLine("|Name:" + hero.name + "|Health:" + hero.health + "|Damage:" + hero.currentDamage + "|Level:" + hero.level + "|XP:" 
-                + hero.xp + "|Health Potions:" + hero.inventory.healthPotion + "|");
+            Console.WriteLine();
+            Console.WriteLine("|Name:" + hero.name + "|Health:" + hero.health + "|Strength:" + hero.strength + "|Damage:" + hero.currentDamage + "|Level:" + hero.level + "|XP:" + hero.xp 
+                + "|CritChance:" + (hero.criticalChance * 10) + "%" + "|CritDamage:" + (hero.criticalDamage * 10) + "%" + "|Evasiveness:" + (hero.evasiveness * 10) + "%" 
+                + "|Health Potions:" + hero.inventory.healthPotion + "|Strength Potions:" + hero.inventory.strengthPotion + "|");
+            Console.WriteLine();
         }
 
     }

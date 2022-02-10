@@ -10,7 +10,7 @@ namespace Zemphas
     {
         public static bool complete;
 
-        public static void Level1(Hero hero)
+        public static Hero Level1(Hero hero)
         {
             complete = false;
 
@@ -64,6 +64,12 @@ namespace Zemphas
 
                 Encounters.randomEcounter(hero);
 
+                if (hero.alive == false)
+                {
+                    Console.WriteLine("You lost");
+                    break;
+                }
+
                 Console.WriteLine("You see that there are two paths you can take.");
                 Console.WriteLine("One way leads down a path with shimmering light that you are sure has some sort of treasure.");
                 Console.WriteLine("The other is the way out of the cave. Which way will you go?");
@@ -91,6 +97,16 @@ namespace Zemphas
                         Console.WriteLine("You head down the path of shimmering light.");
                         Encounters.randomEcounter(hero);
                         i = 1;
+                        if (hero.alive == true)
+                        {
+                            HeroManagement.HeroPickupItem(hero);
+                            Console.WriteLine("You exit the cave into a forest.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("You lost...");
+                            break;
+                        }
                     }
                     else if (userChoice == 1)
                     {
@@ -102,14 +118,16 @@ namespace Zemphas
                         Console.WriteLine("You did not put in a correct choice");
                     }
                 }
-
                 complete = true;
             }
+            return hero;
         }
 
-        public static void Level2(Inventory heroInventory, Hero hero)
+        public static Hero Level2(Hero hero)
         {
-            Console.WriteLine(heroInventory.sword.name);
+            HeroManagement.HeroStats(hero);
+            Console.WriteLine("Loading 2nd Level");
+            return hero;
         }
     }
 }

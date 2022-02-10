@@ -9,7 +9,7 @@ namespace Zemphas
 {
     internal class Encounters
     {
-        public static void randomEcounter(Hero encounterHero)
+        public static bool randomEcounter(Hero encounterHero)
         {
             Random random = new Random();
             int userRoll = random.Next(1, 10);
@@ -27,7 +27,7 @@ namespace Zemphas
                 Console.WriteLine("Another Encounter goes here 3");
                 OgreEncounter(encounterHero);
             }
-
+            return false;
         }
 
         public static void OgreEncounter(Hero hero)
@@ -76,12 +76,14 @@ namespace Zemphas
                         //Console.WriteLine(userCritChance.ToString());
                         if ((chanceScale - chanceScale * hero.criticalChance) < userCritChance)
                         {
-                            orgeHealth = (int)(orgeHealth - (critDamage + heroDamage));
+                            Console.WriteLine();
+                            orgeHealth = orgeHealth - (critDamage + heroDamage);
                             Console.WriteLine("Hero attacks the Ogre (" + (heroDamage + critDamage) + " HIT POINTS!)");
                             Console.WriteLine("IT IS A CRITICAL HIT!!!!");
                         }
                         else
                         {
+                            Console.WriteLine();
                             orgeHealth = orgeHealth - heroDamage;
                             Console.WriteLine("Hero attacks the Ogre (" + heroDamage + " HIT POINTS!)");
                         }
@@ -147,11 +149,12 @@ namespace Zemphas
             else if (hero.health <= 0)
             {
                 Console.WriteLine("You perished");
+                hero.alive = false;
             }
             else
             {
                 Console.WriteLine("You defeated the Ogre!!!");
-                HeroManagement.HeroLevelCheck(hero, 50);
+                HeroManagement.HeroLevelCheck(hero, 100);
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
                 HeroManagement.HeroDamageCheck(hero);
@@ -206,12 +209,14 @@ namespace Zemphas
                         //Console.WriteLine(userCritChance.ToString());
                         if ((chanceScale - chanceScale * hero.criticalChance) < userCritChance)
                         {
-                            warlockHealth = (int)(warlockHealth - (critDamage + heroDamage));
+                            Console.WriteLine();
+                            warlockHealth = warlockHealth - (critDamage + heroDamage);
                             Console.WriteLine("Hero attacks the warlock (" + (heroDamage + critDamage) + " HIT POINTS!)");
                             Console.WriteLine("IT IS A CRITICAL HIT!!!!");
                         }
                         else
                         {
+                            Console.WriteLine();
                             warlockHealth = warlockHealth - heroDamage;
                             Console.WriteLine("Hero attacks the warlock (" + heroDamage + " HIT POINTS!)");
                         }
@@ -277,11 +282,12 @@ namespace Zemphas
             else if (hero.health <= 0)
             {
                 Console.WriteLine("You perished");
+                hero.alive = false;
             }
             else
             {
                 Console.WriteLine("You defeated the Warlock!!!");
-                HeroManagement.HeroLevelCheck(hero, 75);
+                HeroManagement.HeroLevelCheck(hero, 100);
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
                 HeroManagement.HeroDamageCheck(hero);
