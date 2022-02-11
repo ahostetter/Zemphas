@@ -8,6 +8,7 @@ namespace Zemphas
 {
     internal class HeroManagement
     {
+        // If hero xp is over 100 then add 1 to Hero level.
         public static void HeroLevelCheck(Hero hero, int xp)
         {
             hero.xp = hero.xp + xp;
@@ -19,11 +20,13 @@ namespace Zemphas
             }
         }
 
+        //Calculates the Hero's damage based on basedamage, Hero level, Sword damage, and Hero strength
         public static void HeroDamageCheck(Hero hero)
         {
             hero.currentDamage = (hero.baseDamage + (hero.level * Modifiers.scaleLevel()) * hero.baseDamage) + hero.inventory.sword.damage + (hero.strength * Modifiers.scaleStrength());
         }
 
+        //If the hero has space in their inventory then randomly select an item
         public static void HeroPickupItem(Hero hero)
         {
             Console.WriteLine("You find something.");
@@ -49,6 +52,7 @@ namespace Zemphas
             }
         }
 
+        // Gives the Hero a menu system to pick a item to use. If the Hero has none of the item then they can't use it
         public static void HeroUseItem(Hero hero)
         {
             int userChoice = 1000;
@@ -103,11 +107,12 @@ namespace Zemphas
             }
         }
 
+        // Displays the Hero stats at any given time
         public static void HeroStats(Hero hero)
         {
             Console.WriteLine();
             Console.WriteLine("|Name:" + hero.name + "|Health:" + hero.health + "|Strength:" + hero.strength + "|Damage:" + hero.currentDamage + "|Level:" + hero.level + "|XP:" + hero.xp 
-                + "|CritChance:" + (hero.criticalChance * 10) + "%" + "|CritDamage:" + (hero.criticalDamage * 10) + "%" + "|Evasiveness:" + (hero.evasiveness * 10) + "%" 
+                + "|CritChance:" + (hero.criticalChance * 100) + "%" + "|CritDamage:" + (hero.criticalDamage * 100) + "%" + "|Evasiveness:" + (hero.evasiveness * 100) + "%" 
                 + "|Health Potions:" + hero.inventory.healthPotion + "|Strength Potions:" + hero.inventory.strengthPotion + "|");
             Console.WriteLine();
         }

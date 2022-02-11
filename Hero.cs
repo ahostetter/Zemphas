@@ -14,14 +14,14 @@ namespace Zemphas
         public double currentDamage;
         public double baseDamage;
         public double level;
-        public int xp;
+        public double xp;
         public double criticalChance;
         public double criticalDamage;
         public double evasiveness;
         public Inventory inventory;
         public bool alive;
 
-        public Hero(string aName, double aHealth, double aStrength, double aCurrentDamage, double aBaseDamage, double aLevel, int aXP, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory, bool aAlive)
+        public Hero(string aName, double aHealth, double aStrength, double aCurrentDamage, double aBaseDamage, double aLevel, double aXP, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory, bool aAlive)
         {
             name = aName;
             health = aHealth;

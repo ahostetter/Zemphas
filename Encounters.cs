@@ -39,8 +39,6 @@ namespace Zemphas
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
 
-            //HeroManagement.HeroStats(hero);
-
             Console.WriteLine("You stand before a hulking giant of a Ogre");
             Console.WriteLine();
 
@@ -73,7 +71,7 @@ namespace Zemphas
                     if (userChoice == 0)
                     {
                         int userCritChance = rnd.Next(1, chanceScale);
-                        //Console.WriteLine(userCritChance.ToString());
+
                         if ((chanceScale - chanceScale * hero.criticalChance) < userCritChance)
                         {
                             Console.WriteLine();
@@ -104,7 +102,7 @@ namespace Zemphas
                     else if (userChoice == 1)
                     {
                         int userEscapeChance = rnd.Next(1, chanceScale);
-                        //Console.WriteLine(userEscapeChance.ToString());
+
                         if ((chanceScale - chanceScale * hero.evasiveness) < userEscapeChance)
                         {
                             escape = true;
@@ -171,8 +169,6 @@ namespace Zemphas
             int userChoice = 0;
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
-
-            //HeroManagement.HeroStats(hero);
 
             Console.WriteLine("You see the red crazy eyes of Warlock as it conjures a spell meant for you");
             Console.WriteLine();
