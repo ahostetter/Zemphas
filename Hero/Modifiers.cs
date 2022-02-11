@@ -10,7 +10,7 @@
 
         public static double heroHealth()
         {
-            double health = 2000;
+            double health = 1500;
             return health;
         }
 
@@ -28,7 +28,7 @@
 
         public static double heroBaseDamage()
         {
-            double baseDamage = 200;
+            double baseDamage = 100;
             return baseDamage;
         }
 
@@ -46,19 +46,19 @@
 
         public static double heroCritChance()
         {
-            double critChance = 1;
+            double critChance = .2;
             return critChance;
         }
 
         public static double heroCritDamage()
         {
-            double critDamage = .5;
+            double critDamage = .2;
             return critDamage;
         }
 
         public static double heroEvasiveness()
         {
-            double evasiveness = .5;
+            double evasiveness = .3;
             return evasiveness;
         }
 
@@ -78,6 +78,18 @@
         {
             double levelScale = .1;
             return levelScale;
+        }
+
+        public static int OgreExperience()
+        {
+            int ogreExperience = 75;
+            return ogreExperience;
+        }
+
+        public static int WarlockExperience()
+        {
+            int warlockExperience = 100;
+            return warlockExperience;
         }
     }
 }

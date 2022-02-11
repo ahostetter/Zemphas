@@ -147,7 +147,7 @@ namespace Zemphas
             else
             {
                 Console.WriteLine("You defeated the Ogre!!!");
-                HeroManagement.HeroLevelCheck(hero, 100);
+                HeroManagement.HeroLevelCheck(hero, Modifiers.OgreExperience());
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
                 HeroManagement.HeroDamageCheck(hero);
@@ -278,7 +278,7 @@ namespace Zemphas
             else
             {
                 Console.WriteLine("You defeated the Warlock!!!");
-                HeroManagement.HeroLevelCheck(hero, 100);
+                HeroManagement.HeroLevelCheck(hero, Modifiers.WarlockExperience());
                 Console.WriteLine(hero.level);
                 Console.WriteLine(hero.xp);
                 HeroManagement.HeroDamageCheck(hero);
