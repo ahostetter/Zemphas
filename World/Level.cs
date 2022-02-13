@@ -61,6 +61,7 @@
                 if (hero.alive == false)
                 {
                     Console.WriteLine("You lost");
+                    Console.WriteLine();
                     break;
                 }
 
@@ -99,6 +100,7 @@
                         else
                         {
                             Console.WriteLine("You lost...");
+                            Console.WriteLine();
                             break;
                         }
                     }
