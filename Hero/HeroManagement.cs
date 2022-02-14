@@ -105,9 +105,9 @@
         public static void HeroStats(Hero hero)
         {
             Console.WriteLine();
-            Console.WriteLine("|Name:" + hero.name + "|Health:" + hero.health + "|Strength:" + hero.strength + "|Damage:" + hero.currentDamage + "|Level:" + hero.level + "|XP:" + hero.xp 
-                + "|CritChance:" + (hero.criticalChance * 100) + "%" + "|CritDamage:" + (hero.criticalDamage * 100) + "%" + "|Evasiveness:" + (hero.evasiveness * 100) + "%" 
-                + "|Health Potions:" + hero.inventory.healthPotion + "|Strength Potions:" + hero.inventory.strengthPotion + "|");
+            Console.WriteLine("|Name:" + hero.name + "|Health:" + hero.health + "|Strength:" + hero.strength + "|Damage:" + hero.currentDamage + "|");
+            Console.WriteLine("|Level:" + hero.level + "|XP:" + hero.xp + "|CritChance:" + (hero.criticalChance * 100) + "%" + "|CritDamage:" + (hero.criticalDamage * 100) + "%|");
+            Console.WriteLine("|Evasiveness:" + (hero.evasiveness * 100) + "%" + "|Health Potions:" + hero.inventory.healthPotion + "|Strength Potions:" + hero.inventory.strengthPotion + "|");
             Console.WriteLine();
         }
 
