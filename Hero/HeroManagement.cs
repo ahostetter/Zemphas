@@ -93,6 +93,7 @@
                     else
                     {
                         hero.strength = hero.strength + 10;
+                        HeroDamageCheck(hero);
                         Console.WriteLine("You now have " + hero.strength + " strength");
                         hero.inventory.strengthPotion = hero.inventory.strengthPotion - 1;
                         Console.WriteLine("You now have " + hero.inventory.strengthPotion + " Strength Potions in your Inventory.");

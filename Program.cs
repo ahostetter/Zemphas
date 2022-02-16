@@ -2,7 +2,9 @@
 using System;
 
 Console.WindowWidth = 75;
+#pragma warning disable CA1416 // Validate platform compatibility
 Console.WindowHeight = 70;
+#pragma warning restore CA1416 // Validate platform compatibility
 
 bool wantToPlay = true;
 
