@@ -24,7 +24,7 @@
 
                 while (i == 0)
                 {
-                    Console.WriteLine("What weapon do you choose? " + swords[0].name + "[0] or " + swords[1].name + "[1]?");
+                    Console.WriteLine($"What weapon do you choose? { swords[0].name} [0] or {swords[1].name} [1]?");
 
                     try
                     {
@@ -38,7 +38,7 @@
 
                     if (userChoice == 0)
                     {
-                        Console.WriteLine("You chose a blade with " + swords[0].element + " and a damage output of " + swords[0].damage);
+                        Console.WriteLine($"You chose a blade with {swords[0].element} and a damage output of {swords[0].damage}");
                         hero.inventory.sword = swords[0];
                         i = 1;
                     }

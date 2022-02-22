@@ -1,4 +1,6 @@
-﻿namespace Zemphas
+﻿using Spectre.Console;
+
+namespace Zemphas
 {
     internal class HeroManagement
     {
@@ -110,7 +112,25 @@
             Console.WriteLine("|Level:" + hero.level + "|XP:" + hero.xp + "|CritChance:" + (hero.criticalChance * 100) + "%" + "|CritDamage:" + (hero.criticalDamage * 100) + "%|");
             Console.WriteLine("|Evasiveness:" + (hero.evasiveness * 100) + "%" + "|Health Potions:" + hero.inventory.healthPotion + "|Strength Potions:" + hero.inventory.strengthPotion + "|");
             Console.WriteLine();
-        }
 
+            //// Create a table
+            var table = new Table();
+
+            // Add some columns
+            table.AddColumn("[red]Hero Name[/]");
+            table.AddColumn("[red]Health[/]");
+            table.AddColumn("[red]Strength[/]");
+            table.AddColumn("[red]Damage[/]");
+            table.AddColumn("[red]Level[/]");
+            table.AddColumn("[red]XP[/]");
+            table.AddColumn("[red]Crit Chance[/]");
+
+            // Add some rows
+            table.AddRow(hero.name, hero.health.ToString(), hero.strength.ToString(), hero.currentDamage.ToString(), hero.level.ToString(), hero.xp.ToString(), (hero.criticalDamage * 100) + "%");
+            //table.AddRow(new Markup("[blue]Corgi[/]"), new Panel("Waldo"));
+
+            // Render the table to the console
+            AnsiConsole.Write(table);
+        }
     }
 }
