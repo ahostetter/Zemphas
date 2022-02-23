@@ -8,9 +8,15 @@
             return name;
         }
 
-        public static double heroHealth()
+        public static double maxHeroHealth()
         {
             double health = 1500;
+            return health;
+        }
+
+        public static double heroHealth()
+        {
+            double health = maxHeroHealth();
             return health;
         }
 

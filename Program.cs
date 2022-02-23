@@ -1,5 +1,5 @@
 ﻿using Zemphas;
-using System;
+using Spectre.Console;
 
 Console.WindowWidth = 75;
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -10,11 +10,15 @@ bool wantToPlay = true;
 
 while (wantToPlay)
 {
-    int userChoice = 1000;
     int i = 0;
 
     while (i == 0)
     {
+        AnsiConsole.Write(
+            new FigletText("    Zemphas")
+            .LeftAligned()
+            .Color(Color.Red));
+
         Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&#&@@@@@@#&@@@@@@@@@@@@@@@@@@@@@");
         Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#G5YB@@@@#GYY@@@@@@@@@&#GPP&&#@@@@");
@@ -43,27 +47,26 @@ while (wantToPlay)
         Console.WriteLine("@@@@@@@@@@@&BPPGPGGGGGG#@@@@@@@@@@&5?YGG5GBP55YYYY?JYYJJYYYYJYPP@@@@@@@@@@@");
         Console.WriteLine("@@@@@@@@@@@@@@@@@@@&@@@@@@@@@@@@@#?!P#BGGGP5YYYYYYJYJYYJYYY5?GBG&@@@@@@@@@@");
         Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@P77J5BBGP5Y55YYYYJYJJYY?JYYYYBBBG@@@@@@@@@@");
+        Console.WriteLine();
+        Console.WriteLine();
 
-        Console.WriteLine("Play Game [0]");
-        Console.WriteLine("Exit [1]");
+        // Ask for the user's favorite fruit
+        var choice = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                //.Title("What will you do?")
+                .PageSize(10)
+                .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                .AddChoices(new[] {
+            "Start Game", "Exit",
+                }));
 
-        try
-        {
-            userChoice = Convert.ToInt32(Console.ReadLine());
-        }
-        catch (Exception)
-        {
-            Console.WriteLine("You did not put in a number");
-            userChoice = 1000;
-        }
-
-        if (userChoice == 0)
+        if (choice == "Start Game")
         {
             Console.WriteLine("Starting Game");
             Console.WriteLine();
             i = 1;
         }
-        else if (userChoice == 1)
+        else if (choice == "Exit")
         {
             Console.WriteLine("Exiting Game");
             i = 1;
@@ -89,7 +92,7 @@ while (wantToPlay)
         Inventory zemphasInventory = new Inventory(new Sword("Dull Blade", 20, "dagger", "None"), 0, 0, 3);
 
         // Loads the Hero with all of the base stats, and the hero stores the inventory
-        Hero zemphas = new Hero(Modifiers.heroName(), Modifiers.heroHealth(), Modifiers.heroStrength(), Modifiers.heroCurrentDamage(),
+        Hero zemphas = new Hero(Modifiers.heroName(), Modifiers.maxHeroHealth(), Modifiers.heroHealth(), Modifiers.heroStrength(), Modifiers.heroCurrentDamage(),
             Modifiers.heroBaseDamage(), Modifiers.heroStartingLevel(), Modifiers.heroXP(), Modifiers.heroCritChance(), Modifiers.heroCritDamage(),
             Modifiers.heroEvasiveness(), zemphasInventory, Modifiers.heroAlive());
 

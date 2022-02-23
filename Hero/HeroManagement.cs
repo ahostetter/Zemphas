@@ -113,7 +113,15 @@ namespace Zemphas
             Console.WriteLine("|Evasiveness:" + (hero.evasiveness * 100) + "%" + "|Health Potions:" + hero.inventory.healthPotion + "|Strength Potions:" + hero.inventory.strengthPotion + "|");
             Console.WriteLine();
 
-            //// Create a table
+            //Bar Chart used as a Health bar. Blacked out maxHealth in order to compare the 2 so Health would go down after damage
+            AnsiConsole.Write(new BarChart()
+                .Width(70)
+                .Label("[red bold underline]Hero Stats[/]")
+                .CenterLabel()
+                .AddItem("", hero.maxHealth, Color.Black)
+                .AddItem("Health", hero.health, Color.Red));
+
+            //// Create a table for Stats
             var table = new Table();
 
             // Add some columns
@@ -127,7 +135,6 @@ namespace Zemphas
 
             // Add some rows
             table.AddRow(hero.name, hero.health.ToString(), hero.strength.ToString(), hero.currentDamage.ToString(), hero.level.ToString(), hero.xp.ToString(), (hero.criticalDamage * 100) + "%");
-            //table.AddRow(new Markup("[blue]Corgi[/]"), new Panel("Waldo"));
 
             // Render the table to the console
             AnsiConsole.Write(table);

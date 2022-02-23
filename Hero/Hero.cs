@@ -3,6 +3,7 @@
     internal class Hero
     {
         public string name;
+        public double maxHealth;
         public double health;
         public double strength;
         public double currentDamage;
@@ -15,9 +16,10 @@
         public Inventory inventory;
         public bool alive;
 
-        public Hero(string aName, double aHealth, double aStrength, double aCurrentDamage, double aBaseDamage, double aLevel, double aXP, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory, bool aAlive)
+        public Hero(string aName, double aMaxHealth, double aHealth, double aStrength, double aCurrentDamage, double aBaseDamage, double aLevel, double aXP, double aCriticalChance, double aCriticalDamage, double aEvasiveness, Inventory aInventory, bool aAlive)
         {
             name = aName;
+            maxHealth = aMaxHealth;
             health = aHealth;
             strength = aStrength;
             currentDamage = aCurrentDamage;

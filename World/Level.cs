@@ -1,4 +1,6 @@
-﻿namespace Zemphas
+﻿using Spectre.Console;
+
+namespace Zemphas
 {
     internal class Level
     {
@@ -65,9 +67,9 @@
                     break;
                 }
 
-                Console.WriteLine("You see that there are two paths you can take.");
-                Console.WriteLine("One way leads down a path with shimmering light that you are sure has some sort of treasure.");
-                Console.WriteLine("The other is the way out of the cave. Which way will you go?");
+                AnsiConsole.Write(new Markup("[bold red]You see that there are two paths you can take.[/]"));
+                AnsiConsole.Write(new Markup("[bold red]One way leads down a path with shimmering light that you are sure has some sort of treasure.[/]"));
+                AnsiConsole.Write(new Markup("[bold red]The other is the way out of the cave. Which way will you go?[/]"));
                 Console.WriteLine();
 
                 i = 0;
