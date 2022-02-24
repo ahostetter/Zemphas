@@ -64,7 +64,7 @@
 
         public static double heroEvasiveness()
         {
-            double evasiveness = .0;
+            double evasiveness = .5;
             return evasiveness;
         }
 

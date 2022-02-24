@@ -119,6 +119,7 @@ namespace Zemphas
 
             //// Create a table for Stats
             var table = new Table();
+            var table2 = new Table();
 
             // Add some columns
             table.AddColumn("[red]Hero Name[/]");
@@ -129,11 +130,18 @@ namespace Zemphas
             table.AddColumn("[red]XP[/]");
             table.AddColumn("[red]Crit Chance[/]");
 
+            table2.AddColumn("[red]Crit Damage[/]");
+            table2.AddColumn("[red]Evasiveness[/]");
+            table2.AddColumn("[red]Health Potions[/]");
+            table2.AddColumn("[red]Strength Potions[/]");
+
             // Add some rows
             table.AddRow(hero.name, hero.health.ToString(), hero.strength.ToString(), hero.currentDamage.ToString(), hero.level.ToString(), hero.xp.ToString(), (hero.criticalChance * 100) + "%");
+            table2.AddRow((hero.criticalDamage * 100) + "%", (hero.evasiveness * 100) + "%", hero.inventory.healthPotion.ToString(), hero.inventory.strengthPotion.ToString());
 
             // Render the table to the console
             AnsiConsole.Write(table);
+            AnsiConsole.Write(table2);
         }
     }
 }

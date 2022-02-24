@@ -13,6 +13,8 @@ namespace Zemphas
             Random rnd = new Random();
             Sword[] swords = { new Sword("Excalibar", rnd.Next(300, 500), "claymore", "Fire"), new Sword("Scorn", rnd.Next(300, 500), "rapier", "Ice") };
 
+            HeroManagement.HeroStats(hero);
+
             Console.WriteLine("You wake up in a dark cave and have no idea how you got there.");
             Console.WriteLine("The only light you can see is in the distance from the mouth of the cave");
             Console.WriteLine("You see a treasure chest close by and you walk up to it and open it.");
