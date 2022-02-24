@@ -11,7 +11,6 @@ namespace Zemphas
             complete = false;
 
             Random rnd = new Random();
-            int userChoice = 0;
             Sword[] swords = { new Sword("Excalibar", rnd.Next(300, 500), "claymore", "Fire"), new Sword("Scorn", rnd.Next(300, 500), "rapier", "Ice") };
 
             Console.WriteLine("You wake up in a dark cave and have no idea how you got there.");
@@ -22,38 +21,29 @@ namespace Zemphas
 
             while (complete == false)
             {
-                int i = 0;
+                // Ask user what sword the Hero wants
+                var choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("What sword do you choose?")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                        .AddChoices(new[] {
+                        swords[0].name, swords[1].name,
+                        }));
 
-                while (i == 0)
+                if (choice == swords[0].name)
                 {
-                    Console.WriteLine($"What weapon do you choose? { swords[0].name} [0] or {swords[1].name} [1]?");
-
-                    try
-                    {
-                        userChoice = Convert.ToInt32(Console.ReadLine());
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("You did not put in a number");
-                        userChoice = 1000;
-                    }
-
-                    if (userChoice == 0)
-                    {
-                        Console.WriteLine($"You chose a blade with {swords[0].element} and a damage output of {swords[0].damage}");
-                        hero.inventory.sword = swords[0];
-                        i = 1;
-                    }
-                    else if (userChoice == 1)
-                    {
-                        Console.WriteLine("You chose a blade with " + swords[1].element + " and a damage output of " + swords[1].damage);
-                        hero.inventory.sword = swords[1];
-                        i = 1;
-                    }
-                    else
-                    {
-                        Console.WriteLine("You did not put in a correct choice");
-                    }
+                    Console.WriteLine($"You chose a blade with {swords[0].element} and a damage output of {swords[0].damage}");
+                    hero.inventory.sword = swords[0];
+                }
+                else if (choice == swords[1].name)
+                {
+                    Console.WriteLine("You chose a blade with " + swords[1].element + " and a damage output of " + swords[1].damage);
+                    hero.inventory.sword = swords[1];
+                }
+                else
+                {
+                    Console.WriteLine("You did not put in a correct choice");
                 }
 
                 Console.WriteLine("You keep walking but you notice something is near you.");
@@ -67,54 +57,46 @@ namespace Zemphas
                     break;
                 }
 
-                AnsiConsole.Write(new Markup("[bold red]You see that there are two paths you can take.[/]"));
-                AnsiConsole.Write(new Markup("[bold red]One way leads down a path with shimmering light that you are sure has some sort of treasure.[/]"));
-                AnsiConsole.Write(new Markup("[bold red]The other is the way out of the cave. Which way will you go?[/]"));
+                AnsiConsole.Write(new Markup("[red]You see that there are two paths you can take.[/]"));
+                Console.WriteLine();
+                AnsiConsole.Write(new Markup("[red]One way leads down a path with shimmering light.[/]"));
+                Console.WriteLine();
+                AnsiConsole.Write(new Markup("[red]The other is the way out of the cave.[/]"));
                 Console.WriteLine();
 
-                i = 0;
+                // Ask user what sword the Hero wants
+                choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Which path do you choose?")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                        .AddChoices(new[] {
+                        "Shimmery Light", "Exit the Cave",
+                        }));
 
-                while (i == 0)
+                if (choice == "Shimmery Light")
                 {
-
-                    try
+                    Console.WriteLine("You head down the path of shimmering light.");
+                    Encounters.randomEcounter(hero);
+                    if (hero.alive == true)
                     {
-                        Console.WriteLine("Path of shimmering light [0] or exit the cave? [1]");
-
-                        userChoice = System.Convert.ToInt32(Console.ReadLine());
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("You did not put in a number");
-                        userChoice = 1000;
-                    }
-
-                    if (userChoice == 0)
-                    {
-                        Console.WriteLine("You head down the path of shimmering light.");
-                        Encounters.randomEcounter(hero);
-                        i = 1;
-                        if (hero.alive == true)
-                        {
-                            HeroManagement.HeroPickupItem(hero);
-                            Console.WriteLine("You exit the cave into a forest.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("You lost...");
-                            Console.WriteLine();
-                            break;
-                        }
-                    }
-                    else if (userChoice == 1)
-                    {
+                        HeroManagement.HeroPickupItem(hero);
                         Console.WriteLine("You exit the cave into a forest.");
-                        i = 1;
                     }
                     else
                     {
-                        Console.WriteLine("You did not put in a correct choice");
+                        Console.WriteLine("You lost...");
+                        Console.WriteLine();
+                        break;
                     }
+                }
+                else if (choice == "Exit the Cave")
+                {
+                    Console.WriteLine("You exit the cave into a forest.");
+                }
+                else
+                {
+                    Console.WriteLine("You did not put in a correct choice");
                 }
                 complete = true;
             }

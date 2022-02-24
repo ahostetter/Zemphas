@@ -51,28 +51,20 @@ namespace Zemphas
         // Gives the Hero a menu system to pick a item to use. If the Hero has none of the item then they can't use it
         public static void HeroUseItem(Hero hero)
         {
-            int userChoice = 1000;
+            int i = 1000;
 
-            while (userChoice != 0)
+            while (i != 0)
             {
-                userChoice = 1000;
+                // User Options
+                var choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                        .AddChoices(new[] {
+                        "Health Potion", "Strength Potion", "Exit Inventory",
+                        }));
 
-                Console.WriteLine("What item do you want to use?");
-                Console.WriteLine();
-                Console.WriteLine("Health Potion [1]");
-                Console.WriteLine("Strength Potion [2]");
-                Console.WriteLine("Exit Inventory [0]");
-
-                try
-                {
-                    userChoice = Convert.ToInt32(Console.ReadLine());
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("You did not put in a number");
-                }
-
-                if (userChoice == 1)
+                if (choice == "Health Potion")
                 {
                     if (hero.inventory.healthPotion <= 0)
                     {
@@ -86,7 +78,7 @@ namespace Zemphas
                         Console.WriteLine("You now have " + hero.inventory.healthPotion + " Health Potions in your Inventory.");
                     }
                 }
-                else if (userChoice == 2)
+                else if (choice == "Strength Potion")
                 {
                     if (hero.inventory.strengthPotion <= 0)
                     {
@@ -100,6 +92,10 @@ namespace Zemphas
                         hero.inventory.strengthPotion = hero.inventory.strengthPotion - 1;
                         Console.WriteLine("You now have " + hero.inventory.strengthPotion + " Strength Potions in your Inventory.");
                     }
+                }
+                else
+                {
+                    i = 0;
                 }
             }
         }
@@ -134,7 +130,7 @@ namespace Zemphas
             table.AddColumn("[red]Crit Chance[/]");
 
             // Add some rows
-            table.AddRow(hero.name, hero.health.ToString(), hero.strength.ToString(), hero.currentDamage.ToString(), hero.level.ToString(), hero.xp.ToString(), (hero.criticalDamage * 100) + "%");
+            table.AddRow(hero.name, hero.health.ToString(), hero.strength.ToString(), hero.currentDamage.ToString(), hero.level.ToString(), hero.xp.ToString(), (hero.criticalChance * 100) + "%");
 
             // Render the table to the console
             AnsiConsole.Write(table);

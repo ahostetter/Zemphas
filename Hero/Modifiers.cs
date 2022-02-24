@@ -52,7 +52,7 @@
 
         public static double heroCritChance()
         {
-            double critChance = .2;
+            double critChance = .5;
             return critChance;
         }
 
