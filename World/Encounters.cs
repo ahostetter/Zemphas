@@ -31,11 +31,10 @@ namespace Zemphas
             Random rnd = new Random();
             Ogre ogre = new Ogre(rnd.Next(1500, 2000), rnd.Next(200, 300));
             HeroManagement.HeroDamageCheck(hero);
-            int userChoice = 0;
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
 
-            Console.WriteLine("You stand before a hulking giant of a Ogre");
+            AnsiConsole.Write(new Markup("[blue]You stand before a hulking giant of a Ogre[/]"));
             Console.WriteLine();
 
             double orgeHealth = ogre.health;
@@ -48,7 +47,7 @@ namespace Zemphas
                 var choice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .PageSize(10)
-                        .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                        .MoreChoicesText("[blue](Move up and down to reveal more choices)[/]")
                         .AddChoices(new[] {
                         "Attack", "Try to Escape", "Use Item", "Check Hero Stats",
                         }));
@@ -164,7 +163,6 @@ namespace Zemphas
             Random rnd = new Random();
             Warlock warlock = new Warlock(rnd.Next(800, 1000), rnd.Next(500, 800));
             HeroManagement.HeroDamageCheck(hero);
-            int userChoice = 0;
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
 

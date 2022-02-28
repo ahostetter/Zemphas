@@ -103,12 +103,6 @@ namespace Zemphas
         // Displays the Hero stats at any given time
         public static void HeroStats(Hero hero)
         {
-            Console.WriteLine();
-            Console.WriteLine("|Name:" + hero.name + "|Health:" + hero.health + "|Strength:" + hero.strength + "|Damage:" + hero.currentDamage + "|");
-            Console.WriteLine("|Level:" + hero.level + "|XP:" + hero.xp + "|CritChance:" + (hero.criticalChance * 100) + "%" + "|CritDamage:" + (hero.criticalDamage * 100) + "%|");
-            Console.WriteLine("|Evasiveness:" + (hero.evasiveness * 100) + "%" + "|Health Potions:" + hero.inventory.healthPotion + "|Strength Potions:" + hero.inventory.strengthPotion + "|");
-            Console.WriteLine();
-
             //Bar Chart used as a Health bar. Blacked out maxHealth in order to compare the 2 so Health would go down after damage
             AnsiConsole.Write(new BarChart()
                 .Width(70)
