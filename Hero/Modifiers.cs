@@ -86,16 +86,28 @@
             return levelScale;
         }
 
-        public static int OgreExperience()
+        public static int ogreExperience()
         {
             int ogreExperience = 75;
             return ogreExperience;
         }
 
-        public static int WarlockExperience()
+        public static double ogreAccuracy()
+        {
+            double warlockAccuracy = .5;
+            return warlockAccuracy;
+        }
+
+        public static int warlockExperience()
         {
             int warlockExperience = 100;
             return warlockExperience;
+        }
+
+        public static double warlockAccuracy()
+        {
+            double warlockAccuracy = .8;
+            return warlockAccuracy;
         }
     }
 }

@@ -29,12 +29,13 @@ namespace Zemphas
         public static void OgreEncounter(Hero hero)
         {
             Random rnd = new Random();
-            Ogre ogre = new Ogre(rnd.Next(1500, 2000), rnd.Next(200, 300));
+            Ogre ogre = new Ogre(rnd.Next(1500, 2000), rnd.Next(200, 300), Modifiers.ogreAccuracy());
             HeroManagement.HeroDamageCheck(hero);
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
 
             AnsiConsole.Write(new Markup("[blue]You stand before a hulking giant of a Ogre[/]"));
+            Console.WriteLine();
             Console.WriteLine();
 
             double orgeHealth = ogre.health;
@@ -56,9 +57,9 @@ namespace Zemphas
                 {
                     if (choice == "Attack")
                     {
-                        int userCritChance = rnd.Next(1, chanceScale);
+                        int diceRoll = rnd.Next(1, chanceScale);
 
-                        if ((chanceScale - chanceScale * hero.criticalChance) < userCritChance)
+                        if ((chanceScale - chanceScale * hero.criticalChance) < diceRoll)
                         {
                             AnsiConsole.Write(
                             new FigletText("CRITICAL!!")
@@ -87,9 +88,17 @@ namespace Zemphas
                             Console.WriteLine("The Ogre has " + orgeHealth + " health now");
                             Console.WriteLine();
                             Console.WriteLine("The Ogre swings his club at you");
-                            hero.health = hero.health - ogre.damage;
-                            Console.WriteLine("You take " + ogre.damage + " damage which leaves you with " + hero.health + " health");
-                            Console.WriteLine();
+
+                            if ((chanceScale - chanceScale * ogre.accuracy) < diceRoll)
+                            {
+                                hero.health = hero.health - ogre.damage;
+                                Console.WriteLine("You take " + ogre.damage + " damage which leaves you with " + hero.health + " health");
+                                Console.WriteLine();
+                            }
+                            else
+                            {
+                                Console.WriteLine("You dodged the attack");
+                            }
                         }
                         else
                         {
@@ -149,9 +158,7 @@ namespace Zemphas
             else
             {
                 Console.WriteLine("You defeated the Ogre!!!");
-                HeroManagement.HeroLevelCheck(hero, Modifiers.OgreExperience());
-                Console.WriteLine(hero.level);
-                Console.WriteLine(hero.xp);
+                HeroManagement.HeroLevelCheck(hero, Modifiers.ogreExperience());
                 HeroManagement.HeroDamageCheck(hero);
                 HeroManagement.HeroPickupItem(hero);
                 Console.WriteLine();
@@ -161,12 +168,13 @@ namespace Zemphas
         public static void WarlockEncounter(Hero hero)
         {
             Random rnd = new Random();
-            Warlock warlock = new Warlock(rnd.Next(800, 1000), rnd.Next(500, 800));
+            Warlock warlock = new Warlock(rnd.Next(800, 1000), rnd.Next(500, 800), Modifiers.warlockAccuracy());
             HeroManagement.HeroDamageCheck(hero);
             int chanceScale = 10;
             double critDamage = hero.currentDamage * hero.criticalDamage;
 
             Console.WriteLine("You see the red crazy eyes of Warlock as it conjures a spell meant for you");
+            Console.WriteLine();
             Console.WriteLine();
 
             double warlockHealth = warlock.health;
@@ -188,9 +196,9 @@ namespace Zemphas
                 {
                     if (choice == "Attack")
                     {
-                        int userCritChance = rnd.Next(1, chanceScale);
-                        //Console.WriteLine(userCritChance.ToString());
-                        if ((chanceScale - chanceScale * hero.criticalChance) < userCritChance)
+                        int diceRoll = rnd.Next(1, chanceScale);
+
+                        if ((chanceScale - chanceScale * hero.criticalChance) < diceRoll)
                         {
                             AnsiConsole.Write(
                             new FigletText("CRITICAL!!")
@@ -219,9 +227,17 @@ namespace Zemphas
                             Console.WriteLine("The warlock has " + warlockHealth + " health now");
                             Console.WriteLine();
                             Console.WriteLine("The warlock sends a bolt of lightning your way");
-                            hero.health = hero.health - warlock.damage;
-                            Console.WriteLine("You take " + warlock.damage + " damage which leaves you with " + hero.health + " health");
-                            Console.WriteLine();
+
+                            if ((chanceScale - chanceScale * warlock.accuracy) < diceRoll)
+                            {
+                                hero.health = hero.health - warlock.damage;
+                                Console.WriteLine("You take " + warlock.damage + " damage which leaves you with " + hero.health + " health");
+                                Console.WriteLine();
+                            }
+                            else
+                            {
+                                Console.WriteLine("You dodged the attack!");
+                            }
                         }
                         else
                         {
@@ -231,7 +247,7 @@ namespace Zemphas
                     else if (choice == "Try to Escape")
                     {
                         int userEscapeChance = rnd.Next(1, chanceScale);
-                        //Console.WriteLine(userEscapeChance.ToString());
+
                         if ((chanceScale - chanceScale * hero.evasiveness) < userEscapeChance)
                         {
                             escape = true;
@@ -281,9 +297,7 @@ namespace Zemphas
             else
             {
                 Console.WriteLine("You defeated the Warlock!!!");
-                HeroManagement.HeroLevelCheck(hero, Modifiers.WarlockExperience());
-                Console.WriteLine(hero.level);
-                Console.WriteLine(hero.xp);
+                HeroManagement.HeroLevelCheck(hero, Modifiers.warlockExperience());
                 HeroManagement.HeroDamageCheck(hero);
                 HeroManagement.HeroPickupItem(hero);
                 Console.WriteLine();

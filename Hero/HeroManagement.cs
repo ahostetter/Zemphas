@@ -25,6 +25,7 @@ namespace Zemphas
         //If the hero has space in their inventory then randomly select an item
         public static void HeroPickupItem(Hero hero)
         {
+            Console.WriteLine();
             Console.WriteLine("You find something.");
 
             if (Inventory.inventorySpaceCheck(hero.inventory))

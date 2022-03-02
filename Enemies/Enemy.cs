@@ -10,11 +10,13 @@ namespace Zemphas.Enemies
     {
         public double health;
         public double damage;
+        public double accuracy;
 
-        public Enemy(double aHealth, double aDamage)
+        public Enemy(double aHealth, double aDamage, double aAccuracy)
         {
             health = aHealth;
             damage = aDamage;
+            accuracy = aAccuracy;
         }
     }
 }
