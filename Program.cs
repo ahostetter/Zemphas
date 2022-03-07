@@ -109,6 +109,24 @@ while (wantToPlay)
         // Checks to make sure Hero is still alive and if he is then load state of Hero into Second Level
         if (zemphas.alive)
         {
+            // Asynchronous
+            await AnsiConsole.Progress()
+                .AutoClear(true)
+                .StartAsync(async ctx =>
+                {
+                // Define tasks
+                var task1 = ctx.AddTask("[red]Loading 2nd Level[/]");
+
+                    while (!ctx.IsFinished)
+                    {
+                    // Delay load
+                    await Task.Delay(10);
+
+                    // Increment
+                    task1.Increment(2);
+                    }
+                });
+            //Loads Hero state into Level 2
             Level.Level2(zemphas);
         }
 

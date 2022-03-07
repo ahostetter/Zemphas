@@ -87,7 +87,7 @@ namespace Zemphas
                     Encounters.randomEcounter(hero);
                     if (hero.alive == true)
                     {
-                        HeroManagement.HeroPickupItem(hero);
+                        Console.WriteLine("Hero get's special item that I need to define still");
                         Console.WriteLine("You exit the cave into a forest.");
                     }
                     else
@@ -113,8 +113,9 @@ namespace Zemphas
         public static Hero Level2(Hero hero)
         {
             HeroManagement.HeroStats(hero);
-            Console.WriteLine("Loading 2nd Level");
+
             return hero;
+
         }
     }
 }
