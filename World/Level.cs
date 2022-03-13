@@ -71,7 +71,7 @@ namespace Zemphas
                 Console.WriteLine();
                 Console.WriteLine();
 
-                // Ask user what sword the Hero wants
+                // Ask user what path to take
                 choice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .Title("Which path do you choose?")
@@ -114,8 +114,82 @@ namespace Zemphas
         {
             HeroManagement.HeroStats(hero);
 
-            return hero;
+            complete = false;
 
+            Random rnd = new Random();
+
+            HeroManagement.HeroStats(hero);
+
+            Console.WriteLine();
+            AnsiConsole.Write(new Markup("[blue]You wake up in a dark cave and have no idea how you got there.[/]"));
+            Console.WriteLine();
+            AnsiConsole.Write(new Markup("[blue]The only light you can see is in the distance from the mouth of the cave[/]"));
+            Console.WriteLine();
+            AnsiConsole.Write(new Markup("[blue]You see a treasure chest close by and you walk up to it and open it.[/]"));
+            Console.WriteLine();
+            AnsiConsole.Write(new Markup("[blue]Inside you find swords that seemed to be enchanted![/]"));
+            Console.WriteLine();
+            Console.WriteLine();
+
+            while (complete == false)
+            {
+                AnsiConsole.Write(new Markup("[blue]You keep walking but you notice something is near you.[/]"));
+                Console.WriteLine();
+
+                Encounters.randomEcounter(hero);
+
+                if (hero.alive == false)
+                {
+                    Console.WriteLine("You lost");
+                    Console.WriteLine();
+                    break;
+                }
+
+                AnsiConsole.Write(new Markup("[blue]You see that there are two paths you can take.[/]"));
+                Console.WriteLine();
+                AnsiConsole.Write(new Markup("[blue]One way leads down a path with shimmering light.[/]"));
+                Console.WriteLine();
+                AnsiConsole.Write(new Markup("[blue]The other is the way out of the cave.[/]"));
+                Console.WriteLine();
+                Console.WriteLine();
+
+                // Ask user what sword the Hero wants
+                var choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Which path do you choose?")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                        .AddChoices(new[] {
+                        "Shimmery Light", "Exit the Cave",
+                        }));
+
+                if (choice == "Shimmery Light")
+                {
+                    Console.WriteLine("You head down the path of shimmering light.");
+                    Encounters.randomEcounter(hero);
+                    if (hero.alive == true)
+                    {
+                        Console.WriteLine("Hero get's special item that I need to define still");
+                        Console.WriteLine("You exit the cave into a forest.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("You lost...");
+                        Console.WriteLine();
+                        break;
+                    }
+                }
+                else if (choice == "Exit the Cave")
+                {
+                    Console.WriteLine("You exit the cave into a forest.");
+                }
+                else
+                {
+                    Console.WriteLine("You did not put in a correct choice");
+                }
+                complete = true;
+            }
+            return hero;
         }
     }
 }

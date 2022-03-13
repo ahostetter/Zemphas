@@ -65,7 +65,7 @@ namespace Zemphas
                             new FigletText("CRITICAL!!")
                             .LeftAligned()
                             .Color(Color.Red));
-                            Thread.Sleep(500);
+                            //Thread.Sleep(500);
 
                             Console.WriteLine();
                             orgeHealth = orgeHealth - (critDamage + heroDamage);
@@ -78,7 +78,7 @@ namespace Zemphas
                             new FigletText("CHARGE!!")
                             .LeftAligned()
                             .Color(Color.Red));
-                            Thread.Sleep(500);
+                            //Thread.Sleep(500);
 
                             orgeHealth = orgeHealth - heroDamage;
                             Console.WriteLine("Hero attacks the Ogre (" + heroDamage + " HIT POINTS!)");
@@ -204,7 +204,7 @@ namespace Zemphas
                             new FigletText("CRITICAL!!")
                             .LeftAligned()
                             .Color(Color.Red));
-                            Thread.Sleep(500);
+                            //Thread.Sleep(500);
 
                             Console.WriteLine();
                             warlockHealth = warlockHealth - (critDamage + heroDamage);
@@ -217,7 +217,7 @@ namespace Zemphas
                             new FigletText("CHARGE!!")
                             .LeftAligned()
                             .Color(Color.Red));
-                            Thread.Sleep(500);
+                            //Thread.Sleep(500);
 
                             warlockHealth = warlockHealth - heroDamage;
                             Console.WriteLine("Hero attacks the warlock (" + heroDamage + " HIT POINTS!)");
