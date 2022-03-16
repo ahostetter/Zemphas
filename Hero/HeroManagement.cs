@@ -4,6 +4,33 @@ namespace Zemphas
 {
     internal class HeroManagement
     {
+        // Hero Alive Check
+        public static bool HeroAliveCheck(Hero hero)
+        {
+            if (hero.alive == false)
+            {
+                Console.WriteLine("YOU LOST...");
+                Console.WriteLine();
+                return false;
+            }
+            return true;
+        }
+
+        // Hero evasion/sneak check
+        public static bool HeroEvasionCheck(Hero hero)
+        {
+            int chanceScale = 10;
+            Random random = new Random();
+
+            int userEscapeChance = random.Next(1, chanceScale);
+
+            if ((chanceScale - chanceScale * hero.evasiveness) < userEscapeChance)
+            {
+                return true;
+            }
+            return false;
+        }
+
         // If hero xp is over 100 then add 1 to Hero level.
         public static void HeroLevelCheck(Hero hero, int xp)
         {

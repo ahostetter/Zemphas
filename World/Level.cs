@@ -56,10 +56,8 @@ namespace Zemphas
 
                 Encounters.randomEcounter(hero);
 
-                if (hero.alive == false)
+                if (!HeroManagement.HeroAliveCheck(hero))
                 {
-                    Console.WriteLine("You lost");
-                    Console.WriteLine();
                     break;
                 }
 
@@ -85,15 +83,13 @@ namespace Zemphas
                 {
                     Console.WriteLine("You head down the path of shimmering light.");
                     Encounters.randomEcounter(hero);
-                    if (hero.alive == true)
+                    if (HeroManagement.HeroAliveCheck(hero))
                     {
                         Console.WriteLine("Hero get's special item that I need to define still");
                         Console.WriteLine("You exit the cave into a forest.");
                     }
                     else
                     {
-                        Console.WriteLine("You lost...");
-                        Console.WriteLine();
                         break;
                     }
                 }
@@ -118,74 +114,50 @@ namespace Zemphas
 
             Random rnd = new Random();
 
-            HeroManagement.HeroStats(hero);
-
             Console.WriteLine();
-            AnsiConsole.Write(new Markup("[blue]You wake up in a dark cave and have no idea how you got there.[/]"));
+            AnsiConsole.Write(new Markup("[blue]You walk out into the forest.[/]"));
             Console.WriteLine();
-            AnsiConsole.Write(new Markup("[blue]The only light you can see is in the distance from the mouth of the cave[/]"));
+            AnsiConsole.Write(new Markup("[blue]You see a distant castle in the distance.[/]"));
             Console.WriteLine();
-            AnsiConsole.Write(new Markup("[blue]You see a treasure chest close by and you walk up to it and open it.[/]"));
+            AnsiConsole.Write(new Markup("[blue]You decide to make your way towards it.[/]"));
             Console.WriteLine();
-            AnsiConsole.Write(new Markup("[blue]Inside you find swords that seemed to be enchanted![/]"));
+            AnsiConsole.Write(new Markup("[blue]As your walking you notice an Ogre standing in your way, but[/]"));
+            Console.WriteLine();
+            AnsiConsole.Write(new Markup("[blue]he has not noticed you yet.[/]"));
             Console.WriteLine();
             Console.WriteLine();
 
             while (complete == false)
             {
-                AnsiConsole.Write(new Markup("[blue]You keep walking but you notice something is near you.[/]"));
-                Console.WriteLine();
-
-                Encounters.randomEcounter(hero);
-
-                if (hero.alive == false)
-                {
-                    Console.WriteLine("You lost");
-                    Console.WriteLine();
-                    break;
-                }
-
-                AnsiConsole.Write(new Markup("[blue]You see that there are two paths you can take.[/]"));
-                Console.WriteLine();
-                AnsiConsole.Write(new Markup("[blue]One way leads down a path with shimmering light.[/]"));
-                Console.WriteLine();
-                AnsiConsole.Write(new Markup("[blue]The other is the way out of the cave.[/]"));
-                Console.WriteLine();
-                Console.WriteLine();
-
                 // Ask user what sword the Hero wants
                 var choice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
-                        .Title("Which path do you choose?")
+                        .Title("Will you try to sneak past him, or fight him?")
                         .PageSize(10)
                         .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
                         .AddChoices(new[] {
-                        "Shimmery Light", "Exit the Cave",
+                        "Sneak", "Fight",
                         }));
 
-                if (choice == "Shimmery Light")
+                if (choice == "Sneak")
                 {
-                    Console.WriteLine("You head down the path of shimmering light.");
-                    Encounters.randomEcounter(hero);
-                    if (hero.alive == true)
+                    if (HeroManagement.HeroEvasionCheck(hero))
                     {
-                        Console.WriteLine("Hero get's special item that I need to define still");
-                        Console.WriteLine("You exit the cave into a forest.");
+                        Console.WriteLine("You were able to sneak past the Ogre");
                     }
                     else
                     {
-                        Console.WriteLine("You lost...");
-                        Console.WriteLine();
-                        break;
+                        Encounters.OgreEncounter(hero);
                     }
                 }
-                else if (choice == "Exit the Cave")
+                else if (choice == "Fight")
                 {
-                    Console.WriteLine("You exit the cave into a forest.");
+                    Encounters.OgreEncounter(hero);
                 }
-                else
+
+                if (!HeroManagement.HeroAliveCheck(hero))
                 {
-                    Console.WriteLine("You did not put in a correct choice");
+                    break;
                 }
                 complete = true;
             }
