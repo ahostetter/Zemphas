@@ -147,6 +147,7 @@ namespace Zemphas
                     }
                     else
                     {
+                        Console.WriteLine("Trying to sneak failed");
                         Encounters.OgreEncounter(hero);
                     }
                 }
@@ -159,6 +160,37 @@ namespace Zemphas
                 {
                     break;
                 }
+
+                Console.WriteLine();
+                AnsiConsole.Write(new Markup("[blue]Up further on the path you see a fountain.[/]"));
+                Console.WriteLine();
+                AnsiConsole.Write(new Markup("[blue]The water looks as if it is flowing with some magical essence[/]"));
+                Console.WriteLine();
+                AnsiConsole.Write(new Markup("[blue]You approach cautiously.[/]"));
+                Console.WriteLine();
+                Console.WriteLine();
+
+                // Ask user what they should do about the fountain
+                choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("You wonder if you should take a drink from it?")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                        .AddChoices(new[] {
+                        "Drink", "Leave",
+                        }));
+
+                if (choice == "Drink")
+                {
+                    hero.strength = hero.strength + 20;
+                    Console.WriteLine("You take a drink");
+                    Console.WriteLine("You feel stronger!!!");
+                }
+                else if (choice == "Leave")
+                {
+                    Console.WriteLine("You leave to worried that the water will hurt you...");
+                }
+
                 complete = true;
             }
             return hero;
