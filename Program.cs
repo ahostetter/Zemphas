@@ -101,7 +101,7 @@ while (wantToPlay)
         // Loads the Hero with all of the base stats, and the hero stores the inventory
         Hero zemphas = new Hero(Modifiers.heroName(), Modifiers.maxHeroHealth(), Modifiers.heroHealth(), Modifiers.heroStrength(), Modifiers.heroCurrentDamage(),
             Modifiers.heroBaseDamage(), Modifiers.heroStartingLevel(), Modifiers.heroXP(), Modifiers.heroCritChance(), Modifiers.heroCritDamage(),
-            Modifiers.heroEvasiveness(), zemphasInventory, Modifiers.heroAlive());
+            Modifiers.heroEvasiveness(), Modifiers.heroLuck(), zemphasInventory, Modifiers.heroAlive());
 
         // Load state of Hero after first level
         zemphas = Level.Level1(zemphas);

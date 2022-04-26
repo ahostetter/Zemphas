@@ -182,9 +182,18 @@ namespace Zemphas
 
                 if (choice == "Drink")
                 {
-                    hero.strength = hero.strength + 20;
                     Console.WriteLine("You take a drink");
-                    Console.WriteLine("You feel stronger!!!");
+
+                    if (HeroManagement.HeroLuckCheck(hero))
+                    {
+                        hero.strength = hero.strength + 20;
+                        Console.WriteLine("You feel stronger!!!");
+                    }
+                    else
+                    {
+                        hero.health = hero.health - 100;
+                        Console.WriteLine("You take 100 damage!!!");
+                    }
                 }
                 else if (choice == "Leave")
                 {

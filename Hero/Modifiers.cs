@@ -68,6 +68,12 @@
             return evasiveness;
         }
 
+        public static double heroLuck()
+        {
+            double luck = .5;
+            return luck;
+        }
+
         public static bool heroAlive()
         {
             bool alive = true;

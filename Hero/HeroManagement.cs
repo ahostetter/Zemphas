@@ -31,6 +31,21 @@ namespace Zemphas
             return false;
         }
 
+        // Hero luck check
+        public static bool HeroLuckCheck(Hero hero)
+        {
+            int chanceScale = 10;
+            Random random = new Random();
+
+            int userLuckChance = random.Next(1, chanceScale);
+
+            if ((chanceScale - chanceScale * hero.luck) < userLuckChance)
+            {
+                return true;
+            }
+            return false;
+        }
+
         // If hero xp is over 100 then add 1 to Hero level.
         public static void HeroLevelCheck(Hero hero, int xp)
         {
