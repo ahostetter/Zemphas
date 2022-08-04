@@ -115,5 +115,10 @@
             double warlockAccuracy = .8;
             return warlockAccuracy;
         }
+        public static int healthPotionStrength()
+        {
+            int healthPotionStrength = 1600;
+            return healthPotionStrength;
+        }
     }
 }

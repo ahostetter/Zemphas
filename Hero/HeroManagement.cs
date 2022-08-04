@@ -115,7 +115,12 @@ namespace Zemphas
                     }
                     else
                     {
-                        hero.health = hero.health + 300;
+                        if((hero.maxHealth + Modifiers.healthPotionStrength()) > hero.maxHealth)
+                            hero.health = hero.maxHealth;
+                        else
+                        {
+                            hero.health = hero.health + Modifiers.healthPotionStrength();
+                        }
                         Console.WriteLine("You now have " + hero.health + " health");
                         hero.inventory.healthPotion = hero.inventory.healthPotion - 1;
                         Console.WriteLine("You now have " + hero.inventory.healthPotion + " Health Potions in your Inventory.");
