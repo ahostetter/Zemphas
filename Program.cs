@@ -1,6 +1,8 @@
 ﻿using Zemphas;
 using Spectre.Console;
 
+
+//Not working in Windows 11 with new Terminal 
 Console.WindowWidth = 75;
 #pragma warning disable CA1416 // Validate platform compatibility
 Console.WindowHeight = 50;
