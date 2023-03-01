@@ -156,7 +156,7 @@ namespace Zemphas
                 .Width(70)
                 .Label("[red bold underline]Hero Stats[/]")
                 .CenterLabel()
-                .AddItem("", hero.maxHealth, Color.Black)
+                .AddItem("Max Health", hero.maxHealth, Color.Black)
                 .AddItem("Health", hero.health, Color.Red));
 
             //// Create a table for Stats
