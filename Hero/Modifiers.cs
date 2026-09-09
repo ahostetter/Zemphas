@@ -100,8 +100,8 @@
 
         public static double ogreAccuracy()
         {
-            double warlockAccuracy = .5;
-            return warlockAccuracy;
+            double ogreAccuracy = .5;
+            return ogreAccuracy;
         }
 
         public static int warlockExperience()
