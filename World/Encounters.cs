@@ -32,14 +32,12 @@ namespace Zemphas
             Ogre ogre = new Ogre(rnd.Next(1500, 2000), rnd.Next(200, 300), Modifiers.ogreAccuracy());
             HeroManagement.HeroDamageCheck(hero);
             int chanceScale = 10;
-            double critDamage = hero.currentDamage * hero.criticalDamage;
 
             AnsiConsole.Write(new Markup("[blue]You stand before a hulking giant of a Ogre[/]"));
             Console.WriteLine();
             Console.WriteLine();
 
             double orgeHealth = ogre.health;
-            double heroDamage = hero.currentDamage;
             bool escape = false;
 
             while (orgeHealth > 0 && escape == false && hero.health > 0)
@@ -57,9 +55,14 @@ namespace Zemphas
                 {
                     if (choice == "Attack")
                     {
-                        int diceRoll = rnd.Next(1, chanceScale);
+                        // Recalculated every round so a Strength Potion used mid-fight takes effect immediately
+                        HeroManagement.HeroDamageCheck(hero);
+                        double heroDamage = hero.currentDamage;
+                        double critDamage = hero.currentDamage * hero.criticalDamage;
 
-                        if ((chanceScale - chanceScale * hero.criticalChance) < diceRoll)
+                        int critRoll = rnd.Next(1, chanceScale + 1);
+
+                        if ((chanceScale - chanceScale * hero.criticalChance) < critRoll)
                         {
                             AnsiConsole.Write(
                             new FigletText("CRITICAL!!")
@@ -89,7 +92,10 @@ namespace Zemphas
                             Console.WriteLine();
                             Console.WriteLine("The Ogre swings his club at you");
 
-                            if ((chanceScale - chanceScale * ogre.accuracy) < diceRoll)
+                            // Rolled separately from the Hero's crit roll so the two outcomes are independent
+                            int ogreAccuracyRoll = rnd.Next(1, chanceScale + 1);
+
+                            if ((chanceScale - chanceScale * ogre.accuracy) < ogreAccuracyRoll)
                             {
                                 hero.health = hero.health - ogre.damage;
                                 Console.WriteLine("You take " + ogre.damage + " damage which leaves you with " + hero.health + " health");
@@ -171,14 +177,12 @@ namespace Zemphas
             Warlock warlock = new Warlock(rnd.Next(800, 1000), rnd.Next(500, 800), Modifiers.warlockAccuracy());
             HeroManagement.HeroDamageCheck(hero);
             int chanceScale = 10;
-            double critDamage = hero.currentDamage * hero.criticalDamage;
 
             Console.WriteLine("You see the red crazy eyes of Warlock as it conjures a spell meant for you");
             Console.WriteLine();
             Console.WriteLine();
 
             double warlockHealth = warlock.health;
-            double heroDamage = hero.currentDamage;
             bool escape = false;
 
             while (warlockHealth > 0 && escape == false && hero.health > 0)
@@ -196,9 +200,14 @@ namespace Zemphas
                 {
                     if (choice == "Attack")
                     {
-                        int diceRoll = rnd.Next(1, chanceScale);
+                        // Recalculated every round so a Strength Potion used mid-fight takes effect immediately
+                        HeroManagement.HeroDamageCheck(hero);
+                        double heroDamage = hero.currentDamage;
+                        double critDamage = hero.currentDamage * hero.criticalDamage;
 
-                        if ((chanceScale - chanceScale * hero.criticalChance) < diceRoll)
+                        int critRoll = rnd.Next(1, chanceScale + 1);
+
+                        if ((chanceScale - chanceScale * hero.criticalChance) < critRoll)
                         {
                             AnsiConsole.Write(
                             new FigletText("CRITICAL!!")
@@ -228,7 +237,10 @@ namespace Zemphas
                             Console.WriteLine();
                             Console.WriteLine("The warlock sends a bolt of lightning your way");
 
-                            if ((chanceScale - chanceScale * warlock.accuracy) < diceRoll)
+                            // Rolled separately from the Hero's crit roll so the two outcomes are independent
+                            int warlockAccuracyRoll = rnd.Next(1, chanceScale + 1);
+
+                            if ((chanceScale - chanceScale * warlock.accuracy) < warlockAccuracyRoll)
                             {
                                 hero.health = hero.health - warlock.damage;
                                 Console.WriteLine("You take " + warlock.damage + " damage which leaves you with " + hero.health + " health");
