@@ -149,7 +149,7 @@ namespace Zemphas
 
                 foreach (ExitData exit in byId[id].Exits)
                 {
-                    foreach (string target in new[] { exit.To, exit.FailTo })
+                    foreach (string? target in new string?[] { exit.To, exit.FailTo })
                     {
                         if (string.IsNullOrEmpty(target)) continue;
 
@@ -273,7 +273,8 @@ namespace Zemphas
 
                 case "boss":
                 {
-                    EncounterOutcome outcome = Encounters.Encounter(hero, EnemyFor(roomEvent.Enemy!));
+                    // The run ends after the boss, so no growth prompt
+                    EncounterOutcome outcome = Encounters.Encounter(hero, EnemyFor(roomEvent.Enemy!), offerBoons: false);
                     if (outcome == EncounterOutcome.Victory)
                     {
                         bossDefeated = true;
