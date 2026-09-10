@@ -15,7 +15,7 @@ Console.WriteLine();
 
 Hero NewHero(double swordDamage, string element = "None")
 {
-    Inventory inventory = new Inventory(new Sword("Sim Blade", swordDamage, "claymore", element), 0, 0, 3);
+    Inventory inventory = new Inventory(new Sword("Sim Blade", swordDamage, "claymore", element), 0, 0, 6);
     return new Hero(Modifiers.heroName(), Modifiers.maxHeroHealth(), Modifiers.heroHealth(),
         Modifiers.heroStrength(), Modifiers.heroCurrentDamage(), Modifiers.heroBaseDamage(),
         Modifiers.heroStartingLevel(), Modifiers.heroXP(), Modifiers.heroCritChance(),
@@ -131,82 +131,106 @@ foreach (string element in new[] { "None", "Fire", "Ice" })
 }
 Console.WriteLine();
 
-Console.WriteLine("=== full run: three encounters, health carries over ===");
-void FullRun(string label, Func<double, double, bool, AttackProfile> strategy, bool usePotions, string element = "None")
+Console.WriteLine("=== full run through the expanded world ===");
+
+// Mirrors Content/world.json. A step is an encounter table, a named enemy, or "rest".
+string[] longPath  = { "cave", "deepcave", "deepcave", "Ogre", "forest", "rest", "highlands", "highlands", "rest", "castle", "castle", "Warlord" };
+string[] shortPath = { "cave", "rest", "rest", "highlands", "rest", "castle", "castle", "Warlord" };
+
+Dictionary<string, string[]> tables = new Dictionary<string, string[]>
+{
+    ["cave"] = new[] { "Goblin", "GiantSpider", "Goblin" },
+    ["deepcave"] = new[] { "GiantSpider", "Ogre", "Goblin" },
+    ["forest"] = new[] { "Ogre", "Warlock" },
+    ["highlands"] = new[] { "Troll", "Wraith", "Troll", "Warlock" },
+    ["castle"] = new[] { "Wraith", "Troll" },
+};
+
+Enemy Spawn(string name)
+{
+    switch (name)
+    {
+        case "Goblin": return new Goblin();
+        case "GiantSpider": return new GiantSpider();
+        case "Ogre": return new Ogre();
+        case "Warlock": return new Warlock();
+        case "Troll": return new Troll();
+        case "Wraith": return new Wraith();
+        case "Warlord": return new Warlord();
+        default: throw new Exception("unknown enemy " + name);
+    }
+}
+
+void FullRun(string label, Func<double, double, bool, AttackProfile> strategy, bool usePotions,
+    string element, string[] path)
 {
     int survived = 0;
     double totalRounds = 0;
+    double totalFights = 0;
 
     for (int i = 0; i < trials; i++)
     {
         Hero hero = NewHero(rnd.Next(300, 500), element);
         bool alive = true;
 
-        // Level 1 random, shimmer-path random, Level 2's scripted Ogre, then the Warlord
-        for (int encounter = 0; encounter < 4 && alive; encounter++)
+        foreach (string step in path)
         {
-            Enemy enemy = encounter == 3 ? new Warlord()
-                        : encounter == 2 ? new Ogre()
-                        : (rnd.Next(0, 2) == 0 ? (Enemy)new Ogre() : new Warlock());
+            if (!alive) break;
+
+            if (step == "rest")
+            {
+                hero.health = Math.Min(hero.maxHealth, hero.health + hero.maxHealth * Modifiers.restHealAmount());
+                continue;
+            }
+
+            string enemyName = tables.ContainsKey(step)
+                ? tables[step][rnd.Next(tables[step].Length)]
+                : step;
+
+            Enemy enemy = Spawn(enemyName);
             var (won, rounds, _) = Fight(hero, enemy, strategy, usePotions);
             totalRounds += rounds;
+            totalFights++;
             alive = won;
 
-            // Levelling through the real code path. Boons are player choices, so
-            // this models a sensible one: heal up when hurt, otherwise get stronger.
-            if (alive)
-            {
-                int levels = Combat.ApplyExperience(hero, enemy.experience);
+            if (!alive) break;
 
-                for (int l = 0; l < levels; l++)
+            // Levelling through the real code path; the boss grants no usable boon
+            int levels = Combat.ApplyExperience(hero, enemy.experience);
+            for (int l = 0; l < levels; l++)
+            {
+                if (hero.health / hero.maxHealth < 0.55)
                 {
-                    if (hero.health / hero.maxHealth < 0.55)
-                    {
-                        hero.maxHealth += Modifiers.boonMaxHealth();
-                        hero.health = Math.Min(hero.maxHealth, hero.health + Modifiers.boonMaxHealth());
-                    }
-                    else
-                    {
-                        hero.strength += Modifiers.boonStrength();
-                    }
+                    hero.maxHealth += Modifiers.boonMaxHealth();
+                    hero.health = Math.Min(hero.maxHealth, hero.health + Modifiers.boonMaxHealth());
+                }
+                else
+                {
+                    hero.strength += Modifiers.boonStrength();
                 }
             }
 
-            // Mirrors HeroManagement.HeroPickupItem after a victory
-            if (alive && hero.inventory.healthPotion + hero.inventory.strengthPotion < hero.inventory.space)
+            // Mirrors HeroManagement.HeroPickupItem
+            if (hero.inventory.healthPotion + hero.inventory.strengthPotion < hero.inventory.space)
             {
                 if (rnd.Next(0, 2) == 0) hero.inventory.healthPotion++;
-                else
-                {
-                    hero.inventory.strengthPotion++;
-                    hero.strength += 10;
-                }
+                else { hero.inventory.strengthPotion++; hero.strength += 10; }
             }
         }
 
         if (alive) survived++;
     }
 
-    Console.WriteLine($"  {label,-42} survive {survived * 100.0 / trials,5:F1}%   total rounds {totalRounds / trials,4:F1}");
+    Console.WriteLine($"  {label,-44} survive {survived * 100.0 / trials,5:F1}%   fights {totalFights / trials,4:F1}   rounds {totalRounds / trials,5:F1}");
 }
 
-FullRun("always Attack, no potions", AlwaysAttack, false);
-FullRun("always Heavy Swing, no potions", AlwaysHeavy, false);
-FullRun("always Quick Strike, no potions", AlwaysQuick, false);
-FullRun("considered play, no potions", Considered, false);
+FullRun("long path, considered + potions, Fire", Considered, true, "Fire", longPath);
+FullRun("long path, considered + potions, Ice", Considered, true, "Ice", longPath);
+FullRun("long path, always Attack + potions", AlwaysAttack, true, "Fire", longPath);
+FullRun("long path, always Heavy Swing + potions", AlwaysHeavy, true, "Fire", longPath);
+FullRun("long path, always Quick Strike + potions", AlwaysQuick, true, "Fire", longPath);
+FullRun("long path, considered, no potions", Considered, false, "Fire", longPath);
+FullRun("long path, always Attack, no potions", AlwaysAttack, false, "Fire", longPath);
 Console.WriteLine();
-FullRun("always Attack + potions", AlwaysAttack, true);
-FullRun("considered play + potions  <-- TARGET", Considered, true);
-Console.WriteLine();
-FullRun("considered + potions, Fire blade", Considered, true, "Fire");
-FullRun("considered + potions, Ice blade", Considered, true, "Ice");
-Console.WriteLine();
-Console.WriteLine("=== the Warlord alone, considered play, sword ~450 ===");
-foreach (string element in new[] { "None", "Fire", "Ice" })
-{
-    Scenario($"Warlord vs {element,-5} blade", () => new Warlord(), 450, Considered, element);
-}
-
-Console.WriteLine();
-Console.WriteLine("Target: considered play should clear a run noticeably more often than");
-Console.WriteLine("any single-button strategy. If they match, the choices are not yet real.");
+FullRun("short path, considered + potions, Fire", Considered, true, "Fire", shortPath);
+FullRun("short path, considered + potions, Ice", Considered, true, "Ice", shortPath);
