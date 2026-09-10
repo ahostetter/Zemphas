@@ -115,7 +115,8 @@ namespace Zemphas
                     }
                     else
                     {
-                        if((hero.maxHealth + Modifiers.healthPotionStrength()) > hero.maxHealth)
+                        // Heal up to maxHealth, but never past it
+                        if ((hero.health + Modifiers.healthPotionStrength()) > hero.maxHealth)
                             hero.health = hero.maxHealth;
                         else
                         {

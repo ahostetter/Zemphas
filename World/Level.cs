@@ -187,12 +187,22 @@ namespace Zemphas
                     if (HeroManagement.HeroLuckCheck(hero))
                     {
                         hero.strength = hero.strength + 20;
+                        // Fold the new strength into the Hero's damage, same as a Strength Potion does
+                        HeroManagement.HeroDamageCheck(hero);
                         Console.WriteLine("You feel stronger!!!");
                     }
                     else
                     {
                         hero.health = hero.health - 100;
                         Console.WriteLine("You take 100 damage!!!");
+
+                        // The fountain can kill outright, so the Hero's alive state has to be updated here too
+                        if (hero.health <= 0)
+                        {
+                            hero.health = 0;
+                            hero.alive = false;
+                            Console.WriteLine("The water burns through you. You perished...");
+                        }
                     }
                 }
                 else if (choice == "Leave")
