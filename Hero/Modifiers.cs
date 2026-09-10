@@ -95,13 +95,13 @@
         // Enemy stat ranges live here so difficulty can be tuned in one place
         public static int ogreHealthLow() { return 3000; }
         public static int ogreHealthHigh() { return 4000; }
-        public static int ogreDamageLow() { return 240; }
-        public static int ogreDamageHigh() { return 340; }
+        public static int ogreDamageLow() { return 210; }
+        public static int ogreDamageHigh() { return 300; }
 
         public static int warlockHealthLow() { return 1700; }
         public static int warlockHealthHigh() { return 2200; }
-        public static int warlockDamageLow() { return 300; }
-        public static int warlockDamageHigh() { return 460; }
+        public static int warlockDamageLow() { return 265; }
+        public static int warlockDamageHigh() { return 395; }
 
         public static int ogreExperience()
         {
@@ -134,6 +134,25 @@
             double dodgeScale = .5;
             return dodgeScale;
         }
+
+        // --- Elements -------------------------------------------------------
+        // The Level 1 swords are Fire and Ice, and the two enemies invert each
+        // other's weakness, so neither blade is the safe pick.
+        public static double elementalWeaknessMultiplier() { return 1.45; }
+        public static double elementalResistanceMultiplier() { return 0.82; }
+
+        // --- Enemy signature moves -------------------------------------------
+        public static double ogreEnrageThreshold() { return .35; }  // fires below this share of health
+        public static double ogreEnrageChance() { return .30; }
+        public static double ogreEnrageDamage() { return 1.55; }     // multiple of the Ogre's normal hit
+
+        public static double warlockDrainChance() { return .20; }
+        public static double warlockDrainDamage() { return .65; }   // also heals the Warlock this much
+
+        // --- Level up boons ---------------------------------------------------
+        public static double boonMaxHealth() { return 250; }
+        public static double boonStrength() { return 9; }
+        public static double boonCritChance() { return .07; }
 
         public static int healthPotionStrength()
         {

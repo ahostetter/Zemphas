@@ -78,7 +78,7 @@ namespace Zemphas
                     // Recalculated every round so a Strength Potion used mid-fight takes effect immediately
                     HeroManagement.HeroDamageCheck(hero);
 
-                    HeroAttackResult attack = Combat.ResolveHeroAttack(Random.Shared, hero, chosenProfile, braceBonus);
+                    HeroAttackResult attack = Combat.ResolveHeroAttack(Random.Shared, hero, enemy, chosenProfile, braceBonus);
                     braceBonus = chosenProfile.braceBonus;
 
                     if (!chosenProfile.dealsDamage)
@@ -101,6 +101,17 @@ namespace Zemphas
                         {
                             Console.WriteLine("IT IS A CRITICAL HIT!!!!");
                         }
+
+                        if (attack.elementalMultiplier > 1.0)
+                        {
+                            AnsiConsole.Write(new Markup($"[orange1]The {Markup.Escape(hero.inventory.sword.element)} blade sears the {Markup.Escape(enemy.name)} — it is weak to it![/]"));
+                            Console.WriteLine();
+                        }
+                        else if (attack.elementalMultiplier < 1.0)
+                        {
+                            AnsiConsole.Write(new Markup($"[grey]The {Markup.Escape(enemy.name)} shrugs off your {Markup.Escape(hero.inventory.sword.element)} blade.[/]"));
+                            Console.WriteLine();
+                        }
                     }
                     else
                     {
@@ -115,23 +126,52 @@ namespace Zemphas
                             Console.WriteLine($"The {enemy.name} has {enemyHealth:F0} health now");
                         }
                         Console.WriteLine();
-                        Console.WriteLine($"The {enemy.name} {enemy.attackText}");
 
-                        EnemyAttackResult counter = Combat.ResolveEnemyAttack(Random.Shared, hero, enemy, chosenProfile);
+                        SpecialAbilityResult special = enemy.UseSpecial(Random.Shared, hero, enemyHealth / enemy.health);
 
-                        if (counter.landed)
+                        if (special.triggered)
                         {
-                            hero.health = hero.health - counter.damage;
-                            Console.WriteLine($"You take {counter.damage:F0} damage which leaves you with {hero.health:F0} health");
+                            AnsiConsole.Write(
+                                new FigletText(special.name)
+                                .LeftAligned()
+                                .Color(Color.Purple));
+
+                            AnsiConsole.Write(new Markup($"[purple]{Markup.Escape(special.description)}[/]"));
                             Console.WriteLine();
-                        }
-                        else if (counter.dodged)
-                        {
-                            Console.WriteLine("You slip aside and dodge the attack!");
+
+                            // A signature move cannot be dodged, but guarding still blunts it,
+                            // which is what makes Defend worth reaching for.
+                            double specialDamage = special.damageToHero * chosenProfile.incomingMultiplier;
+                            hero.health = hero.health - specialDamage;
+                            Console.WriteLine($"You take {specialDamage:F0} damage which leaves you with {hero.health:F0} health");
+
+                            if (special.healToEnemy > 0)
+                            {
+                                enemyHealth = enemyHealth + special.healToEnemy;
+                                Console.WriteLine($"The {enemy.name} heals itself to {enemyHealth:F0} health!");
+                            }
+                            Console.WriteLine();
                         }
                         else
                         {
-                            Console.WriteLine($"The {enemy.name} misses!");
+                            Console.WriteLine($"The {enemy.name} {enemy.attackText}");
+
+                            EnemyAttackResult counter = Combat.ResolveEnemyAttack(Random.Shared, hero, enemy, chosenProfile);
+
+                            if (counter.landed)
+                            {
+                                hero.health = hero.health - counter.damage;
+                                Console.WriteLine($"You take {counter.damage:F0} damage which leaves you with {hero.health:F0} health");
+                                Console.WriteLine();
+                            }
+                            else if (counter.dodged)
+                            {
+                                Console.WriteLine("You slip aside and dodge the attack!");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"The {enemy.name} misses!");
+                            }
                         }
                     }
                     else

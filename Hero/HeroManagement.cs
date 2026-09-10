@@ -46,16 +46,59 @@ namespace Zemphas
             return false;
         }
 
-        // If hero xp is over 100 then add 1 to Hero level.
+        // Adds experience and, for every level gained, lets the player pick a boon.
         public static void HeroLevelCheck(Hero hero, int xp)
         {
-            hero.xp = hero.xp + xp;
+            int levelsGained = Combat.ApplyExperience(hero, xp);
 
-            if (hero.xp >= 100)
+            for (int i = 0; i < levelsGained; i++)
             {
-                hero.level = hero.level + 1;
-                hero.xp = hero.xp - 100;
+                AnsiConsole.Write(
+                    new FigletText("LEVEL UP!")
+                    .LeftAligned()
+                    .Color(Color.Yellow));
+
+                AnsiConsole.Write(new Markup($"[yellow]You are now level {hero.level}.[/]"));
+                Console.WriteLine();
+                Console.WriteLine();
+
+                HeroChooseBoon(hero);
             }
+        }
+
+        // Two runs should not look the same. Every level is a fork in the build.
+        public static void HeroChooseBoon(Hero hero)
+        {
+            string vitality = $"Vitality  (+{Modifiers.boonMaxHealth()} max health, healed to full)";
+            string might = $"Might     (+{Modifiers.boonStrength()} strength)";
+            string precision = $"Precision (+{Modifiers.boonCritChance() * 100:F0}% critical chance)";
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Choose how you grow:")
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                    .AddChoices(new[] { vitality, might, precision }));
+
+            if (choice == vitality)
+            {
+                hero.maxHealth = hero.maxHealth + Modifiers.boonMaxHealth();
+                hero.health = hero.maxHealth;
+                Console.WriteLine($"You feel hardier. Max health is now {hero.maxHealth}, and you are fully healed.");
+            }
+            else if (choice == might)
+            {
+                hero.strength = hero.strength + Modifiers.boonStrength();
+                Console.WriteLine($"Your grip tightens. Strength is now {hero.strength}.");
+            }
+            else
+            {
+                hero.criticalChance = hero.criticalChance + Modifiers.boonCritChance();
+                Console.WriteLine($"Your eye sharpens. Critical chance is now {hero.criticalChance * 100:F0}%.");
+            }
+
+            HeroDamageCheck(hero);
+            Console.WriteLine();
         }
 
         //Calculates the Hero's damage based on basedamage, Hero level, Sword damage, and Hero strength
