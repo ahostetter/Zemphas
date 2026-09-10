@@ -69,7 +69,7 @@ namespace Zemphas
         // Two runs should not look the same. Every level is a fork in the build.
         public static void HeroChooseBoon(Hero hero)
         {
-            string vitality = $"Vitality  (+{Modifiers.boonMaxHealth()} max health, healed to full)";
+            string vitality = $"Vitality  (+{Modifiers.boonMaxHealth()} max health, and heal that much)";
             string might = $"Might     (+{Modifiers.boonStrength()} strength)";
             string precision = $"Precision (+{Modifiers.boonCritChance() * 100:F0}% critical chance)";
 
@@ -82,9 +82,11 @@ namespace Zemphas
 
             if (choice == vitality)
             {
+                // Heals by what it grants rather than to full: a full heal every level
+                // made careful play and button-mashing score almost the same.
                 hero.maxHealth = hero.maxHealth + Modifiers.boonMaxHealth();
-                hero.health = hero.maxHealth;
-                Console.WriteLine($"You feel hardier. Max health is now {hero.maxHealth}, and you are fully healed.");
+                hero.health = Math.Min(hero.maxHealth, hero.health + Modifiers.boonMaxHealth());
+                Console.WriteLine($"You feel hardier. Max health is now {hero.maxHealth}, and you recover {Modifiers.boonMaxHealth()} health.");
             }
             else if (choice == might)
             {
@@ -191,6 +193,54 @@ namespace Zemphas
                     i = 0;
                 }
             }
+        }
+
+        // The treasure at the end of the shimmering path: a blade of the opposite
+        // element to the one the Hero is carrying. Taking the risky path is what
+        // buys the chance to pivot a build that is badly matched to what is ahead.
+        public static void HeroFindSword(Hero hero)
+        {
+            string currentElement = hero.inventory.sword.element;
+            string newElement = currentElement == "Fire" ? "Ice" : "Fire";
+            string newName = newElement == "Fire" ? "Emberfang" : "Rimewake";
+
+            Sword found = new Sword(newName, Random.Shared.Next(Modifiers.treasureSwordLow(), Modifiers.treasureSwordHigh()),
+                hero.inventory.sword.type, newElement);
+
+            Console.WriteLine();
+            AnsiConsole.Write(new Markup($"[yellow]Set into the cave wall is a second blade: {Markup.Escape(found.name)}.[/]"));
+            Console.WriteLine();
+
+            var table = new Table();
+            table.AddColumn("[red]Blade[/]");
+            table.AddColumn("[red]Damage[/]");
+            table.AddColumn("[red]Element[/]");
+            table.AddRow($"{hero.inventory.sword.name} (carried)", hero.inventory.sword.damage.ToString(), hero.inventory.sword.element);
+            table.AddRow($"{found.name} (found)", found.damage.ToString(), found.element);
+            AnsiConsole.Write(table);
+
+            string take = $"Take {found.name}";
+            string keep = $"Keep {hero.inventory.sword.name}";
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Which blade do you carry out of the cave?")
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                    .AddChoices(new[] { take, keep }));
+
+            if (choice == take)
+            {
+                hero.inventory.sword = found;
+                Console.WriteLine($"You leave the old blade behind and take {found.name}.");
+            }
+            else
+            {
+                Console.WriteLine($"You leave {found.name} where it rests.");
+            }
+
+            HeroDamageCheck(hero);
+            Console.WriteLine();
         }
 
         // Displays the Hero stats at any given time

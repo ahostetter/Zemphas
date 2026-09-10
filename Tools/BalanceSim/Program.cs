@@ -142,19 +142,34 @@ void FullRun(string label, Func<double, double, bool, AttackProfile> strategy, b
         Hero hero = NewHero(rnd.Next(300, 500), element);
         bool alive = true;
 
-        for (int encounter = 0; encounter < 3 && alive; encounter++)
+        // Level 1 random, shimmer-path random, Level 2's scripted Ogre, then the Warlord
+        for (int encounter = 0; encounter < 4 && alive; encounter++)
         {
-            Enemy enemy = (encounter == 2 || rnd.Next(0, 2) == 0) ? new Ogre() : new Warlock();
+            Enemy enemy = encounter == 3 ? new Warlord()
+                        : encounter == 2 ? new Ogre()
+                        : (rnd.Next(0, 2) == 0 ? (Enemy)new Ogre() : new Warlock());
             var (won, rounds, _) = Fight(hero, enemy, strategy, usePotions);
             totalRounds += rounds;
             alive = won;
 
-            // Levelling through the real code path (boons are player choices, so the
-            // simulator takes the middle option: strength)
+            // Levelling through the real code path. Boons are player choices, so
+            // this models a sensible one: heal up when hurt, otherwise get stronger.
             if (alive)
             {
                 int levels = Combat.ApplyExperience(hero, enemy.experience);
-                hero.strength += levels * Modifiers.boonStrength();
+
+                for (int l = 0; l < levels; l++)
+                {
+                    if (hero.health / hero.maxHealth < 0.55)
+                    {
+                        hero.maxHealth += Modifiers.boonMaxHealth();
+                        hero.health = Math.Min(hero.maxHealth, hero.health + Modifiers.boonMaxHealth());
+                    }
+                    else
+                    {
+                        hero.strength += Modifiers.boonStrength();
+                    }
+                }
             }
 
             // Mirrors HeroManagement.HeroPickupItem after a victory
@@ -185,6 +200,12 @@ FullRun("considered play + potions  <-- TARGET", Considered, true);
 Console.WriteLine();
 FullRun("considered + potions, Fire blade", Considered, true, "Fire");
 FullRun("considered + potions, Ice blade", Considered, true, "Ice");
+Console.WriteLine();
+Console.WriteLine("=== the Warlord alone, considered play, sword ~450 ===");
+foreach (string element in new[] { "None", "Fire", "Ice" })
+{
+    Scenario($"Warlord vs {element,-5} blade", () => new Warlord(), 450, Considered, element);
+}
 
 Console.WriteLine();
 Console.WriteLine("Target: considered play should clear a run noticeably more often than");

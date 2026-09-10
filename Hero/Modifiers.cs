@@ -149,14 +149,28 @@
         public static double warlockDrainChance() { return .20; }
         public static double warlockDrainDamage() { return .65; }   // also heals the Warlock this much
 
+        // --- The Warlord (final boss) -----------------------------------------
+        public static int warlordHealthLow() { return 3600; }
+        public static int warlordHealthHigh() { return 4400; }
+        public static int warlordDamageLow() { return 235; }
+        public static int warlordDamageHigh() { return 315; }
+        public static double warlordAccuracy() { return .60; }
+        public static int warlordExperience() { return 250; }
+        public static double warlordNovaChance() { return .16; }
+        public static double warlordNovaDamage() { return 1.45; }
+
+        // Damage range for the blade hidden down the shimmering path
+        public static int treasureSwordLow() { return 380; }
+        public static int treasureSwordHigh() { return 560; }
+
         // --- Level up boons ---------------------------------------------------
-        public static double boonMaxHealth() { return 250; }
+        public static double boonMaxHealth() { return 320; }
         public static double boonStrength() { return 9; }
         public static double boonCritChance() { return .07; }
 
         public static int healthPotionStrength()
         {
-            int healthPotionStrength = 700;
+            int healthPotionStrength = 850;
             return healthPotionStrength;
         }
     }
