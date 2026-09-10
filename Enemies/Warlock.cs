@@ -4,8 +4,8 @@
     {
         public Warlock() : base(
             "Warlock",
-            Random.Shared.Next(800, 1000),
-            Random.Shared.Next(500, 800),
+            Random.Shared.Next(Modifiers.warlockHealthLow(), Modifiers.warlockHealthHigh()),
+            Random.Shared.Next(Modifiers.warlockDamageLow(), Modifiers.warlockDamageHigh()),
             Modifiers.warlockAccuracy(),
             Modifiers.warlockExperience(),
             "You see the red crazy eyes of a Warlock as it conjures a spell meant for you",

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Zemphas.BalanceSim</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <!--
+    Compiles the game's real combat code rather than a copy of it, so the
+    simulator and the shipped game can never disagree about the maths.
+    Only Spectre-free files are pulled in; the console UI stays out.
+  -->
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="../../World/Combat.cs" />
+    <Compile Include="../../Hero/Hero.cs" />
+    <Compile Include="../../Hero/Inventory.cs" />
+    <Compile Include="../../Hero/Modifiers.cs" />
+    <Compile Include="../../Items/Sword.cs" />
+    <Compile Include="../../Enemies/Enemy.cs" />
+    <Compile Include="../../Enemies/Ogre.cs" />
+    <Compile Include="../../Enemies/Warlock.cs" />
+  </ItemGroup>
+
+</Project>

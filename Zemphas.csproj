@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,6 +9,13 @@
 
   <ItemGroup>
     <PackageReference Include="Spectre.Console" Version="0.43.0" />
+  </ItemGroup>
+
+  <!-- Tools/ holds separate projects (the balance simulator); the game must not
+       glob their sources or their generated build artifacts. -->
+  <ItemGroup>
+    <Compile Remove="Tools/**" />
+    <None Remove="Tools/**" />
   </ItemGroup>
 
 </Project>

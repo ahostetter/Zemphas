@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zemphas", "Zemphas.csproj", "{167D2072-284F-4390-BA70-7F014FD110C5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{23C50E40-2A34-4B3B-8207-DAF1EDDDF60B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceSim", "Tools\BalanceSim\BalanceSim.csproj", "{888DAAD0-74EE-49E4-9FAA-09A8C8F51651}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,11 +19,18 @@ Global
 		{167D2072-284F-4390-BA70-7F014FD110C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{167D2072-284F-4390-BA70-7F014FD110C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{167D2072-284F-4390-BA70-7F014FD110C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{888DAAD0-74EE-49E4-9FAA-09A8C8F51651}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{888DAAD0-74EE-49E4-9FAA-09A8C8F51651}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{888DAAD0-74EE-49E4-9FAA-09A8C8F51651}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{888DAAD0-74EE-49E4-9FAA-09A8C8F51651}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0DC5E119-5D86-4279-B7BB-67864D8BD9F1}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{888DAAD0-74EE-49E4-9FAA-09A8C8F51651} = {23C50E40-2A34-4B3B-8207-DAF1EDDDF60B}
 	EndGlobalSection
 EndGlobal

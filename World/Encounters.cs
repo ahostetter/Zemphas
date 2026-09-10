@@ -30,8 +30,6 @@ namespace Zemphas
         // on the Enemy itself, so this method never branches on which one it is.
         public static void Encounter(Hero hero, Enemy enemy)
         {
-            int chanceScale = 10;
-
             AnsiConsole.Write(new Markup($"[blue]{Markup.Escape(enemy.introText)}[/]"));
             Console.WriteLine();
             Console.WriteLine();
@@ -39,67 +37,101 @@ namespace Zemphas
             double enemyHealth = enemy.health;
             bool escape = false;
 
+            // Carried by Defend into the following round
+            double braceBonus = 0;
+
             while (enemyHealth > 0 && escape == false && hero.health > 0)
             {
-                // User Options
+                // Swing options first, then the utility choices
+                List<string> options = new List<string>();
+                foreach (AttackProfile p in Combat.attackProfiles)
+                {
+                    options.Add(p.name);
+                }
+                options.Add("Try to Escape");
+                options.Add("Use Item");
+                options.Add("Check Hero Stats");
+
+                if (braceBonus > 0)
+                {
+                    AnsiConsole.Write(new Markup($"[green]You are braced: your next attack deals +{braceBonus * 100:F0}% damage.[/]"));
+                    Console.WriteLine();
+                }
+
                 var choice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .PageSize(10)
                         .MoreChoicesText("[blue](Move up and down to reveal more choices)[/]")
-                        .AddChoices(new[] {
-                        "Attack", "Try to Escape", "Use Item", "Check Hero Stats",
-                        }));
+                        .AddChoices(options));
 
-                if (choice == "Attack")
+                AttackProfile? chosenProfile = null;
+                foreach (AttackProfile p in Combat.attackProfiles)
+                {
+                    if (p.name == choice)
+                    {
+                        chosenProfile = p;
+                    }
+                }
+
+                if (chosenProfile != null)
                 {
                     // Recalculated every round so a Strength Potion used mid-fight takes effect immediately
                     HeroManagement.HeroDamageCheck(hero);
-                    double heroDamage = hero.currentDamage;
-                    double critDamage = hero.currentDamage * hero.criticalDamage;
 
-                    int critRoll = Random.Shared.Next(1, chanceScale + 1);
+                    HeroAttackResult attack = Combat.ResolveHeroAttack(Random.Shared, hero, chosenProfile, braceBonus);
+                    braceBonus = chosenProfile.braceBonus;
 
-                    if ((chanceScale - chanceScale * hero.criticalChance) < critRoll)
+                    if (!chosenProfile.dealsDamage)
+                    {
+                        AnsiConsole.Write(new Markup("[green]You raise your guard and brace for the blow.[/]"));
+                        Console.WriteLine();
+                    }
+                    else if (attack.landed)
                     {
                         AnsiConsole.Write(
-                            new FigletText("CRITICAL!!")
+                            new FigletText(attack.critical ? "CRITICAL!!" : "CHARGE!!")
                             .LeftAligned()
                             .Color(Color.Red));
 
                         Console.WriteLine();
-                        enemyHealth = enemyHealth - (critDamage + heroDamage);
-                        Console.WriteLine($"Hero attacks the {enemy.name} ({heroDamage + critDamage} HIT POINTS!)");
-                        Console.WriteLine("IT IS A CRITICAL HIT!!!!");
+                        enemyHealth = enemyHealth - attack.damage;
+                        Console.WriteLine($"Hero attacks the {enemy.name} ({attack.damage:F0} HIT POINTS!)");
+
+                        if (attack.critical)
+                        {
+                            Console.WriteLine("IT IS A CRITICAL HIT!!!!");
+                        }
                     }
                     else
                     {
-                        AnsiConsole.Write(
-                            new FigletText("CHARGE!!")
-                            .LeftAligned()
-                            .Color(Color.Red));
-
-                        enemyHealth = enemyHealth - heroDamage;
-                        Console.WriteLine($"Hero attacks the {enemy.name} ({heroDamage} HIT POINTS!)");
+                        AnsiConsole.Write(new Markup($"[yellow]Your {Markup.Escape(chosenProfile.name)} goes wide and misses![/]"));
+                        Console.WriteLine();
                     }
 
                     if (enemyHealth > 0)
                     {
-                        Console.WriteLine($"The {enemy.name} has {enemyHealth} health now");
+                        if (chosenProfile.dealsDamage && attack.landed)
+                        {
+                            Console.WriteLine($"The {enemy.name} has {enemyHealth:F0} health now");
+                        }
                         Console.WriteLine();
                         Console.WriteLine($"The {enemy.name} {enemy.attackText}");
 
-                        // Rolled separately from the Hero's crit roll so the two outcomes are independent
-                        int enemyAccuracyRoll = Random.Shared.Next(1, chanceScale + 1);
+                        EnemyAttackResult counter = Combat.ResolveEnemyAttack(Random.Shared, hero, enemy, chosenProfile);
 
-                        if ((chanceScale - chanceScale * enemy.accuracy) < enemyAccuracyRoll)
+                        if (counter.landed)
                         {
-                            hero.health = hero.health - enemy.damage;
-                            Console.WriteLine($"You take {enemy.damage} damage which leaves you with {hero.health} health");
+                            hero.health = hero.health - counter.damage;
+                            Console.WriteLine($"You take {counter.damage:F0} damage which leaves you with {hero.health:F0} health");
                             Console.WriteLine();
+                        }
+                        else if (counter.dodged)
+                        {
+                            Console.WriteLine("You slip aside and dodge the attack!");
                         }
                         else
                         {
-                            Console.WriteLine("You dodged the attack!");
+                            Console.WriteLine($"The {enemy.name} misses!");
                         }
                     }
                     else
@@ -109,9 +141,7 @@ namespace Zemphas
                 }
                 else if (choice == "Try to Escape")
                 {
-                    int userEscapeChance = Random.Shared.Next(1, chanceScale + 1);
-
-                    if ((chanceScale - chanceScale * hero.evasiveness) < userEscapeChance)
+                    if (Combat.Roll(Random.Shared, hero.evasiveness))
                     {
                         escape = true;
                     }
