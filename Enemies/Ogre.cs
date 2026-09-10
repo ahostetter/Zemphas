@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Zemphas.Enemies
+﻿namespace Zemphas.Enemies
 {
     internal class Ogre : Enemy
     {
-
-        public Ogre(double aHealth, double aDamage, double aAccuracy) : base(aHealth, aDamage, aAccuracy)
+        public Ogre() : base(
+            "Ogre",
+            Random.Shared.Next(1500, 2000),
+            Random.Shared.Next(200, 300),
+            Modifiers.ogreAccuracy(),
+            Modifiers.ogreExperience(),
+            "You stand before a hulking giant of an Ogre",
+            "swings his club at you",
+            "swings his club at you")
         {
-            health = aHealth;
-            damage = aDamage;
-            accuracy = aAccuracy;
         }
-
     }
 }
