@@ -2,6 +2,15 @@
 
 namespace Zemphas
 {
+    // How a fight ended. The game could not previously tell a victory from a
+    // flight, which is why running from everything still counted as winning.
+    internal enum EncounterOutcome
+    {
+        Victory,
+        Escaped,
+        Defeated,
+    }
+
     // How the Hero chose to swing this round. Each option trades damage against
     // how exposed it leaves you, so "Attack" is no longer always the right answer.
     internal sealed class AttackProfile

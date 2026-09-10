@@ -1,4 +1,5 @@
 ﻿using Spectre.Console;
+using Zemphas.Enemies;
 
 namespace Zemphas
 {
@@ -85,7 +86,7 @@ namespace Zemphas
                     Encounters.randomEcounter(hero);
                     if (HeroManagement.HeroAliveCheck(hero))
                     {
-                        Console.WriteLine("Hero get's special item that I need to define still");
+                        HeroManagement.HeroFindSword(hero);
                         Console.WriteLine("You exit the cave into a forest.");
                     }
                     else
@@ -106,7 +107,8 @@ namespace Zemphas
             return hero;
         }
 
-        public static Hero Level2(Hero hero)
+        // Returns true only if the Warlord was actually put down. Surviving is not winning.
+        public static bool Level2(Hero hero)
         {
             HeroManagement.HeroStats(hero);
 
@@ -207,12 +209,42 @@ namespace Zemphas
                 }
                 else if (choice == "Leave")
                 {
-                    Console.WriteLine("You leave to worried that the water will hurt you...");
+                    Console.WriteLine("You leave too worried that the water will hurt you...");
+                }
+
+                if (!HeroManagement.HeroAliveCheck(hero))
+                {
+                    return false;
                 }
 
                 complete = true;
             }
-            return hero;
+
+            // The castle, and the fight the whole run has been walking towards
+            Console.WriteLine();
+            AnsiConsole.Write(new Markup("[blue]The trees thin, and the castle stands over you at last.[/]"));
+            Console.WriteLine();
+            AnsiConsole.Write(new Markup("[blue]The gates are open. Nothing has tried to stop you, and that is worse.[/]"));
+            Console.WriteLine();
+            Console.WriteLine();
+
+            HeroManagement.HeroStats(hero);
+
+            EncounterOutcome outcome = Encounters.Encounter(hero, new Warlord());
+
+            if (outcome == EncounterOutcome.Victory)
+            {
+                return true;
+            }
+
+            if (outcome == EncounterOutcome.Escaped)
+            {
+                Console.WriteLine();
+                AnsiConsole.Write(new Markup("[yellow]You run. The castle doors close behind you, and the Warlord still sits his throne.[/]"));
+                Console.WriteLine();
+            }
+
+            return false;
         }
     }
 }

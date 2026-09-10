@@ -2,11 +2,21 @@
 using Spectre.Console;
 
 
-//Not working in Windows 11 with new Terminal 
-Console.WindowWidth = 75;
-#pragma warning disable CA1416 // Validate platform compatibility
-Console.WindowHeight = 50;
-#pragma warning restore CA1416 // Validate platform compatibility
+// Console resizing is Windows-only, and even there the new Windows Terminal
+// refuses it. Guarded so the game runs on macOS and Linux instead of throwing
+// on the first line, and so a refusal is shrugged off rather than fatal.
+if (OperatingSystem.IsWindows())
+{
+    try
+    {
+        Console.WindowWidth = 75;
+        Console.WindowHeight = 50;
+    }
+    catch (Exception)
+    {
+        // Terminal would not be resized; the game plays fine at whatever size it is.
+    }
+}
 
 bool wantToPlay = true;
 
@@ -92,10 +102,8 @@ while (wantToPlay)
         break;
     }
 
-    bool heroAlive = true;
-    bool heroWin = false;
+    bool warlordDefeated = false;
 
-    while (heroAlive == true && heroWin == false)
     {
         // Initiates the starting inventory
         Inventory zemphasInventory = new Inventory(new Sword("Dull Blade", 20, "dagger", "None"), 0, 0, 3);
@@ -104,6 +112,10 @@ while (wantToPlay)
         Hero zemphas = new Hero(Modifiers.heroName(), Modifiers.maxHeroHealth(), Modifiers.heroHealth(), Modifiers.heroStrength(), Modifiers.heroCurrentDamage(),
             Modifiers.heroBaseDamage(), Modifiers.heroStartingLevel(), Modifiers.heroXP(), Modifiers.heroCritChance(), Modifiers.heroCritDamage(),
             Modifiers.heroEvasiveness(), Modifiers.heroLuck(), zemphasInventory, Modifiers.heroAlive());
+
+        // Without this the stats panel greets the player with a Damage of 0,
+        // because currentDamage was only ever calculated once a fight began.
+        HeroManagement.HeroDamageCheck(zemphas);
 
         // Load state of Hero after first level
         zemphas = Level.Level1(zemphas);
@@ -129,23 +141,39 @@ while (wantToPlay)
                     }
                 });
             //Loads Hero state into Level 2
-            Level.Level2(zemphas);
+            warlordDefeated = Level.Level2(zemphas);
         }
+
+        Console.WriteLine();
 
         if (!zemphas.alive)
         {
-            heroAlive = false;
+            AnsiConsole.Write(
+                new FigletText("YOU DIED")
+                .LeftAligned()
+                .Color(Color.Red));
+            AnsiConsole.Write(new Markup("[red]Zemphas falls, and the cave keeps its secret.[/]"));
+        }
+        else if (warlordDefeated)
+        {
+            AnsiConsole.Write(
+                new FigletText("VICTORY")
+                .LeftAligned()
+                .Color(Color.Green));
+            AnsiConsole.Write(new Markup("[green]The Warlord is dead. You beat the Game!!![/]"));
+        }
+        else
+        {
+            // Alive, but the Warlord still sits his throne. Surviving is not winning.
+            AnsiConsole.Write(
+                new FigletText("YOU FLED")
+                .LeftAligned()
+                .Color(Color.Yellow));
+            AnsiConsole.Write(new Markup("[yellow]You live, but the Warlord still holds the castle.[/]"));
         }
 
-        if (zemphas.alive)
-        {
-            heroWin = true;
-        }
-
-        if (heroWin)
-        {
-            Console.WriteLine("You beat the Game!!!");
-        }
+        Console.WriteLine();
+        Console.WriteLine();
     }
 }
 

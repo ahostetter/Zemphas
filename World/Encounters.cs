@@ -14,21 +14,21 @@ namespace Zemphas
         };
 
         // Picks one of the available enemies at random and fights it
-        public static void randomEcounter(Hero encounterHero)
+        public static EncounterOutcome randomEcounter(Hero encounterHero)
         {
             Enemy enemy = randomEnemies[Random.Shared.Next(randomEnemies.Length)]();
-            Encounter(encounterHero, enemy);
+            return Encounter(encounterHero, enemy);
         }
 
         // Level 2 opens with a specific Ogre rather than a random enemy
-        public static void OgreEncounter(Hero hero)
+        public static EncounterOutcome OgreEncounter(Hero hero)
         {
-            Encounter(hero, new Ogre());
+            return Encounter(hero, new Ogre());
         }
 
         // One combat loop for every enemy. All the differences between enemies live
         // on the Enemy itself, so this method never branches on which one it is.
-        public static void Encounter(Hero hero, Enemy enemy)
+        public static EncounterOutcome Encounter(Hero hero, Enemy enemy)
         {
             AnsiConsole.Write(new Markup($"[blue]{Markup.Escape(enemy.introText)}[/]"));
             Console.WriteLine();
@@ -217,20 +217,22 @@ namespace Zemphas
             if (escape)
             {
                 Console.WriteLine("You successfully escaped!");
+                return EncounterOutcome.Escaped;
             }
-            else if (hero.health <= 0)
+
+            if (hero.health <= 0)
             {
                 Console.WriteLine("You perished");
                 hero.alive = false;
+                return EncounterOutcome.Defeated;
             }
-            else
-            {
-                Console.WriteLine($"You defeated the {enemy.name}!!!");
-                HeroManagement.HeroLevelCheck(hero, enemy.experience);
-                HeroManagement.HeroDamageCheck(hero);
-                HeroManagement.HeroPickupItem(hero);
-                Console.WriteLine();
-            }
+
+            Console.WriteLine($"You defeated the {enemy.name}!!!");
+            HeroManagement.HeroLevelCheck(hero, enemy.experience);
+            HeroManagement.HeroDamageCheck(hero);
+            HeroManagement.HeroPickupItem(hero);
+            Console.WriteLine();
+            return EncounterOutcome.Victory;
         }
     }
 }
