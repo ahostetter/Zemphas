@@ -13,9 +13,9 @@ Random rnd = new Random(20260909);
 Console.WriteLine($"Zemphas balance simulation — {trials:N0} trials per scenario");
 Console.WriteLine();
 
-Hero NewHero(double swordDamage)
+Hero NewHero(double swordDamage, string element = "None")
 {
-    Inventory inventory = new Inventory(new Sword("Sim Blade", swordDamage, "claymore", "None"), 0, 0, 3);
+    Inventory inventory = new Inventory(new Sword("Sim Blade", swordDamage, "claymore", element), 0, 0, 3);
     return new Hero(Modifiers.heroName(), Modifiers.maxHeroHealth(), Modifiers.heroHealth(),
         Modifiers.heroStrength(), Modifiers.heroCurrentDamage(), Modifiers.heroBaseDamage(),
         Modifiers.heroStartingLevel(), Modifiers.heroXP(), Modifiers.heroCritChance(),
@@ -45,7 +45,7 @@ Hero NewHero(double swordDamage)
         }
         AttackProfile profile = pickAttack(hero.health / hero.maxHealth, enemyHealth / enemy.health, braceBonus > 0);
 
-        HeroAttackResult attack = Combat.ResolveHeroAttack(rnd, hero, profile, braceBonus);
+        HeroAttackResult attack = Combat.ResolveHeroAttack(rnd, hero, enemy, profile, braceBonus);
         braceBonus = profile.braceBonus;
 
         if (attack.landed)
@@ -55,10 +55,20 @@ Hero NewHero(double swordDamage)
 
         if (enemyHealth > 0)
         {
-            EnemyAttackResult counter = Combat.ResolveEnemyAttack(rnd, hero, enemy, profile);
-            if (counter.landed)
+            SpecialAbilityResult special = enemy.UseSpecial(rnd, hero, enemyHealth / enemy.health);
+
+            if (special.triggered)
             {
-                hero.health -= counter.damage;
+                hero.health -= special.damageToHero * profile.incomingMultiplier;
+                enemyHealth += special.healToEnemy;
+            }
+            else
+            {
+                EnemyAttackResult counter = Combat.ResolveEnemyAttack(rnd, hero, enemy, profile);
+                if (counter.landed)
+                {
+                    hero.health -= counter.damage;
+                }
             }
         }
     }
@@ -87,7 +97,7 @@ AttackProfile Considered(double healthFraction, double enemyFraction, bool brace
     return Named("Attack");
 }
 
-void Scenario(string label, Func<Enemy> makeEnemy, double swordDamage, Func<double, double, bool, AttackProfile> strategy)
+void Scenario(string label, Func<Enemy> makeEnemy, double swordDamage, Func<double, double, bool, AttackProfile> strategy, string element = "None")
 {
     int wins = 0;
     double totalRounds = 0;
@@ -95,7 +105,7 @@ void Scenario(string label, Func<Enemy> makeEnemy, double swordDamage, Func<doub
 
     for (int i = 0; i < trials; i++)
     {
-        Hero hero = NewHero(swordDamage);
+        Hero hero = NewHero(swordDamage, element);
         var (won, rounds, healthLeft) = Fight(hero, makeEnemy(), strategy);
         totalRounds += rounds;
         if (won)
@@ -109,27 +119,27 @@ void Scenario(string label, Func<Enemy> makeEnemy, double swordDamage, Func<doub
     Console.WriteLine($"  {label,-42} win {winRate,5:F1}%   rounds {totalRounds / trials,4:F1}   HP left {(wins > 0 ? totalHealth / wins : 0),6:F0}");
 }
 
-Console.WriteLine("=== single fight, full health, sword ~400 ===");
-Scenario("Ogre    / always Attack", () => new Ogre(), 400, AlwaysAttack);
-Scenario("Ogre    / always Heavy Swing", () => new Ogre(), 400, AlwaysHeavy);
-Scenario("Ogre    / always Quick Strike", () => new Ogre(), 400, AlwaysQuick);
-Scenario("Ogre    / considered play", () => new Ogre(), 400, Considered);
+Console.WriteLine("=== element matrix: considered play, sword ~400 ===");
+foreach (string element in new[] { "None", "Fire", "Ice" })
+{
+    Scenario($"Ogre    vs {element,-5} blade", () => new Ogre(), 400, Considered, element);
+}
 Console.WriteLine();
-Scenario("Warlock / always Attack", () => new Warlock(), 400, AlwaysAttack);
-Scenario("Warlock / always Heavy Swing", () => new Warlock(), 400, AlwaysHeavy);
-Scenario("Warlock / always Quick Strike", () => new Warlock(), 400, AlwaysQuick);
-Scenario("Warlock / considered play", () => new Warlock(), 400, Considered);
+foreach (string element in new[] { "None", "Fire", "Ice" })
+{
+    Scenario($"Warlock vs {element,-5} blade", () => new Warlock(), 400, Considered, element);
+}
 Console.WriteLine();
 
 Console.WriteLine("=== full run: three encounters, health carries over ===");
-void FullRun(string label, Func<double, double, bool, AttackProfile> strategy, bool usePotions)
+void FullRun(string label, Func<double, double, bool, AttackProfile> strategy, bool usePotions, string element = "None")
 {
     int survived = 0;
     double totalRounds = 0;
 
     for (int i = 0; i < trials; i++)
     {
-        Hero hero = NewHero(rnd.Next(300, 500));
+        Hero hero = NewHero(rnd.Next(300, 500), element);
         bool alive = true;
 
         for (int encounter = 0; encounter < 3 && alive; encounter++)
@@ -138,6 +148,14 @@ void FullRun(string label, Func<double, double, bool, AttackProfile> strategy, b
             var (won, rounds, _) = Fight(hero, enemy, strategy, usePotions);
             totalRounds += rounds;
             alive = won;
+
+            // Levelling through the real code path (boons are player choices, so the
+            // simulator takes the middle option: strength)
+            if (alive)
+            {
+                int levels = Combat.ApplyExperience(hero, enemy.experience);
+                hero.strength += levels * Modifiers.boonStrength();
+            }
 
             // Mirrors HeroManagement.HeroPickupItem after a victory
             if (alive && hero.inventory.healthPotion + hero.inventory.strengthPotion < hero.inventory.space)
@@ -164,6 +182,9 @@ FullRun("considered play, no potions", Considered, false);
 Console.WriteLine();
 FullRun("always Attack + potions", AlwaysAttack, true);
 FullRun("considered play + potions  <-- TARGET", Considered, true);
+Console.WriteLine();
+FullRun("considered + potions, Fire blade", Considered, true, "Fire");
+FullRun("considered + potions, Ice blade", Considered, true, "Ice");
 
 Console.WriteLine();
 Console.WriteLine("Target: considered play should clear a run noticeably more often than");

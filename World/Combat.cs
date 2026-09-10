@@ -34,12 +34,37 @@ namespace Zemphas
         public readonly bool landed;
         public readonly bool critical;
         public readonly double damage;
+        public readonly double elementalMultiplier; // 1.0 when the element had no bearing
 
-        public HeroAttackResult(bool aLanded, bool aCritical, double aDamage)
+        public HeroAttackResult(bool aLanded, bool aCritical, double aDamage, double aElementalMultiplier)
         {
             landed = aLanded;
             critical = aCritical;
             damage = aDamage;
+            elementalMultiplier = aElementalMultiplier;
+        }
+    }
+
+    // What an enemy's signature move did this round. Returned rather than printed
+    // so the balance simulator can run abilities with no console attached.
+    internal readonly struct SpecialAbilityResult
+    {
+        public readonly bool triggered;
+        public readonly string name;
+        public readonly string description;
+        public readonly double damageToHero;
+        public readonly double healToEnemy;
+
+        public static readonly SpecialAbilityResult None = new SpecialAbilityResult(false, "", "", 0, 0);
+
+        public SpecialAbilityResult(bool aTriggered, string aName, string aDescription,
+            double aDamageToHero, double aHealToEnemy)
+        {
+            triggered = aTriggered;
+            name = aName;
+            description = aDescription;
+            damageToHero = aDamageToHero;
+            healToEnemy = aHealToEnemy;
         }
     }
 
@@ -94,19 +119,42 @@ namespace Zemphas
                 + (hero.strength * Modifiers.scaleStrength());
         }
 
-        public static HeroAttackResult ResolveHeroAttack(Random rnd, Hero hero, AttackProfile profile, double braceBonus)
+        // How well the Hero's blade suits this enemy. The Level 1 swords are Fire and
+        // Ice, and the two enemies invert each other, so neither sword is the safe pick.
+        public static double ElementalMultiplier(string swordElement, Enemy enemy)
+        {
+            if (string.IsNullOrEmpty(swordElement) || swordElement == "None")
+            {
+                return 1.0;
+            }
+
+            if (swordElement == enemy.weakness)
+            {
+                return Modifiers.elementalWeaknessMultiplier();
+            }
+
+            if (swordElement == enemy.resistance)
+            {
+                return Modifiers.elementalResistanceMultiplier();
+            }
+
+            return 1.0;
+        }
+
+        public static HeroAttackResult ResolveHeroAttack(Random rnd, Hero hero, Enemy enemy, AttackProfile profile, double braceBonus)
         {
             if (!profile.dealsDamage)
             {
-                return new HeroAttackResult(false, false, 0);
+                return new HeroAttackResult(false, false, 0, 1.0);
             }
 
             if (!Roll(rnd, profile.landChance))
             {
-                return new HeroAttackResult(false, false, 0);
+                return new HeroAttackResult(false, false, 0, 1.0);
             }
 
-            double damage = CalculateHeroDamage(hero) * profile.damageMultiplier * (1.0 + braceBonus);
+            double elemental = ElementalMultiplier(hero.inventory.sword.element, enemy);
+            double damage = CalculateHeroDamage(hero) * profile.damageMultiplier * (1.0 + braceBonus) * elemental;
             bool critical = Roll(rnd, hero.criticalChance);
 
             if (critical)
@@ -114,7 +162,24 @@ namespace Zemphas
                 damage = damage + damage * hero.criticalDamage;
             }
 
-            return new HeroAttackResult(true, critical, damage);
+            return new HeroAttackResult(true, critical, damage, elemental);
+        }
+
+        // Adds experience and reports how many levels it bought. Loops, because a
+        // single large award used to grant only one level no matter its size.
+        public static int ApplyExperience(Hero hero, int xp)
+        {
+            hero.xp = hero.xp + xp;
+            int levelsGained = 0;
+
+            while (hero.xp >= 100)
+            {
+                hero.level = hero.level + 1;
+                hero.xp = hero.xp - 100;
+                levelsGained++;
+            }
+
+            return levelsGained;
         }
 
         public static EnemyAttackResult ResolveEnemyAttack(Random rnd, Hero hero, Enemy enemy, AttackProfile profile)
