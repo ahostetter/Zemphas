@@ -1,0 +1,158 @@
+{
+  "startRoom": "cave-wake",
+  "rooms": [
+    {
+      "id": "cave-wake",
+      "text": [
+        "You wake up in a dark cave and have no idea how you got there.",
+        "The only light you can see is in the distance from the mouth of the cave.",
+        "You see a treasure chest close by and you walk up to it and open it.",
+        "Inside you find swords that seemed to be enchanted!"
+      ],
+      "event": { "kind": "swordChoice" },
+      "exits": [
+        { "label": "Head deeper into the cave", "to": "pool:cave" }
+      ]
+    },
+
+    {
+      "id": "cave-narrows",
+      "pool": "cave",
+      "text": [
+        "The passage narrows until your shoulders scrape both walls.",
+        "Something ahead of you decides it has been patient long enough."
+      ],
+      "event": { "kind": "randomEncounter" },
+      "exits": [
+        { "label": "Press on", "to": "cave-junction" }
+      ]
+    },
+    {
+      "id": "cave-bones",
+      "pool": "cave",
+      "text": [
+        "The floor here is white with old bones, and none of them are small.",
+        "You are not the first to walk this way, and something notices that you are."
+      ],
+      "event": { "kind": "randomEncounter" },
+      "exits": [
+        { "label": "Press on", "to": "cave-junction" }
+      ]
+    },
+    {
+      "id": "cave-water",
+      "pool": "cave",
+      "text": [
+        "Black water fills the passage to your knees, cold enough to ache.",
+        "The ripples ahead are not being made by you."
+      ],
+      "event": { "kind": "randomEncounter" },
+      "exits": [
+        { "label": "Press on", "to": "cave-junction" }
+      ]
+    },
+
+    {
+      "id": "cave-junction",
+      "text": [
+        "You see that there are two paths you can take.",
+        "One way leads down a path with shimmering light.",
+        "The other is the way out of the cave."
+      ],
+      "exits": [
+        { "label": "Shimmery Light", "to": "cave-shimmer" },
+        { "label": "Exit the Cave", "to": "cave-mouth" }
+      ]
+    },
+    {
+      "id": "cave-shimmer",
+      "text": [
+        "You head down the path of shimmering light.",
+        "The glow is not treasure. It is something breathing."
+      ],
+      "event": { "kind": "randomEncounter" },
+      "exits": [
+        { "label": "Search the alcove", "to": "cave-treasure" }
+      ]
+    },
+    {
+      "id": "cave-treasure",
+      "text": [
+        "Past the body, the shimmer resolves into a narrow alcove."
+      ],
+      "event": { "kind": "findSword" },
+      "exits": [
+        { "label": "Leave the cave", "to": "forest-edge" }
+      ]
+    },
+    {
+      "id": "cave-mouth",
+      "text": [
+        "You take the safe way, and the light widens ahead of you.",
+        "You exit the cave into a forest."
+      ],
+      "exits": [
+        { "label": "Walk into the forest", "to": "forest-edge" }
+      ]
+    },
+
+    {
+      "id": "forest-edge",
+      "text": [
+        "You walk out into the forest.",
+        "You see a distant castle in the distance.",
+        "You decide to make your way towards it.",
+        "As your walking you notice an Ogre standing in your way, but",
+        "he has not noticed you yet."
+      ],
+      "exits": [
+        {
+          "label": "Sneak",
+          "to": "forest-fountain",
+          "sneak": true,
+          "failTo": "forest-ogre",
+          "sneakSuccessText": "You were able to sneak past the Ogre",
+          "sneakFailText": "Trying to sneak failed"
+        },
+        { "label": "Fight", "to": "forest-ogre" }
+      ]
+    },
+    {
+      "id": "forest-ogre",
+      "text": [],
+      "event": { "kind": "encounter", "enemy": "Ogre" },
+      "exits": [
+        { "label": "Continue towards the castle", "to": "forest-fountain" }
+      ]
+    },
+    {
+      "id": "forest-fountain",
+      "text": [
+        "Up further on the path you see a fountain.",
+        "The water looks as if it is flowing with some magical essence.",
+        "You approach cautiously."
+      ],
+      "event": { "kind": "fountain" },
+      "exits": [
+        { "label": "Continue towards the castle", "to": "castle-gate" }
+      ]
+    },
+
+    {
+      "id": "castle-gate",
+      "text": [
+        "The trees thin, and the castle stands over you at last.",
+        "The gates are open. Nothing has tried to stop you, and that is worse."
+      ],
+      "exits": [
+        { "label": "Enter the throne room", "to": "castle-throne" }
+      ]
+    },
+    {
+      "id": "castle-throne",
+      "text": [],
+      "event": { "kind": "boss", "enemy": "Warlord" },
+      "ending": "victory"
+    }
+  ]
+}

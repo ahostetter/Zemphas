@@ -159,6 +159,14 @@
         public static double warlordNovaChance() { return .16; }
         public static double warlordNovaDamage() { return 1.45; }
 
+        // The magic fountain
+        public static double fountainStrength() { return 20; }
+        public static double fountainDamage() { return 100; }
+
+        // The two blades in the opening chest
+        public static int startingSwordLow() { return 300; }
+        public static int startingSwordHigh() { return 500; }
+
         // Damage range for the blade hidden down the shimmering path
         public static int treasureSwordLow() { return 380; }
         public static int treasureSwordHigh() { return 560; }

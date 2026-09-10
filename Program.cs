@@ -18,6 +18,28 @@ if (OperatingSystem.IsWindows())
     }
 }
 
+// Loaded and validated once at startup so a broken world file fails immediately
+// with a useful message, rather than stranding the player mid-run.
+WorldData world;
+try
+{
+    world = Adventure.Load();
+}
+catch (Exception ex)
+{
+    AnsiConsole.Write(new Markup($"[red]Could not load the world file:[/] {Markup.Escape(ex.Message)}"));
+    Console.WriteLine();
+    return;
+}
+
+// Content check for CI or a quick sanity pass after editing world.json
+if (args.Contains("--validate"))
+{
+    Console.WriteLine("World file loaded and validated.");
+    Console.Write(Adventure.Describe(world));
+    return;
+}
+
 bool wantToPlay = true;
 
 while (wantToPlay)
@@ -117,36 +139,15 @@ while (wantToPlay)
         // because currentDamage was only ever calculated once a fight began.
         HeroManagement.HeroDamageCheck(zemphas);
 
-        // Load state of Hero after first level
-        zemphas = Level.Level1(zemphas);
+        HeroManagement.HeroStats(zemphas);
 
-        // Checks to make sure Hero is still alive and if he is then load state of Hero into Second Level
-        if (zemphas.alive)
-        {
-            // Asynchronous
-            await AnsiConsole.Progress()
-                .AutoClear(true)
-                .StartAsync(async ctx =>
-                {
-                // Define tasks
-                var task1 = ctx.AddTask("[red]Loading 2nd Level[/]");
-
-                    while (!ctx.IsFinished)
-                    {
-                    // Delay load
-                    await Task.Delay(10);
-
-                    // Increment
-                    task1.Increment(2);
-                    }
-                });
-            //Loads Hero state into Level 2
-            warlordDefeated = Level.Level2(zemphas);
-        }
+        // Walks the room graph from Content/world.json instead of two hardcoded levels
+        RunOutcome outcome = Adventure.Run(zemphas, world);
+        warlordDefeated = outcome == RunOutcome.Victory;
 
         Console.WriteLine();
 
-        if (!zemphas.alive)
+        if (outcome == RunOutcome.Died)
         {
             AnsiConsole.Write(
                 new FigletText("YOU DIED")
