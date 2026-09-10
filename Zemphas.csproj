@@ -11,6 +11,12 @@
     <PackageReference Include="Spectre.Console" Version="0.43.0" />
   </ItemGroup>
 
+  <!-- The world file is content, not code: it ships beside the exe so rooms and
+       text can be edited without rebuilding. -->
+  <ItemGroup>
+    <None Update="Content/world.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- Tools/ holds separate projects (the balance simulator); the game must not
        glob their sources or their generated build artifacts. -->
   <ItemGroup>

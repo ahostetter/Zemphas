@@ -195,6 +195,43 @@ namespace Zemphas
             }
         }
 
+        // The opening chest: one Fire blade and one Ice blade. The two enemies you
+        // will meet most invert each other's weakness, so neither is the safe pick.
+        public static void HeroChooseStartingSword(Hero hero)
+        {
+            Sword[] swords =
+            {
+                new Sword("Excalibar", Random.Shared.Next(Modifiers.startingSwordLow(), Modifiers.startingSwordHigh()), "claymore", "Fire"),
+                new Sword("Scorn", Random.Shared.Next(Modifiers.startingSwordLow(), Modifiers.startingSwordHigh()), "rapier", "Ice"),
+            };
+
+            var table = new Table();
+            table.AddColumn("[red]Blade[/]");
+            table.AddColumn("[red]Damage[/]");
+            table.AddColumn("[red]Element[/]");
+            foreach (Sword s in swords)
+            {
+                table.AddRow(s.name, s.damage.ToString(), s.element);
+            }
+            AnsiConsole.Write(table);
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("What sword do you choose?")
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                    .AddChoices(new[] { swords[0].name, swords[1].name }));
+
+            Sword picked = choice == swords[0].name ? swords[0] : swords[1];
+            hero.inventory.sword = picked;
+
+            AnsiConsole.Write(new Markup($"[blue]You chose a blade with {Markup.Escape(picked.element)} and a damage output of {picked.damage}[/]"));
+            Console.WriteLine();
+
+            HeroDamageCheck(hero);
+            Console.WriteLine();
+        }
+
         // The treasure at the end of the shimmering path: a blade of the opposite
         // element to the one the Hero is carrying. Taking the risky path is what
         // buys the chance to pivot a build that is badly matched to what is ahead.
