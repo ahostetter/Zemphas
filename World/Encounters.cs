@@ -28,7 +28,9 @@ namespace Zemphas
 
         // One combat loop for every enemy. All the differences between enemies live
         // on the Enemy itself, so this method never branches on which one it is.
-        public static EncounterOutcome Encounter(Hero hero, Enemy enemy)
+        // offerBoons is false for the final fight, where the run ends immediately
+        // afterwards and a growth prompt would be a choice with nothing to spend it on.
+        public static EncounterOutcome Encounter(Hero hero, Enemy enemy, bool offerBoons = true)
         {
             AnsiConsole.Write(new Markup($"[blue]{Markup.Escape(enemy.introText)}[/]"));
             Console.WriteLine();
@@ -228,7 +230,7 @@ namespace Zemphas
             }
 
             Console.WriteLine($"You defeated the {enemy.name}!!!");
-            HeroManagement.HeroLevelCheck(hero, enemy.experience);
+            HeroManagement.HeroLevelCheck(hero, enemy.experience, offerBoons);
             HeroManagement.HeroDamageCheck(hero);
             HeroManagement.HeroPickupItem(hero);
             Console.WriteLine();

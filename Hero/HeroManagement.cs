@@ -47,9 +47,31 @@ namespace Zemphas
         }
 
         // Adds experience and, for every level gained, lets the player pick a boon.
-        public static void HeroLevelCheck(Hero hero, int xp)
+        //
+        // offerBoons is false after the final fight: the run ends on the next line,
+        // so prompting for growth there is three dead choices in a row.
+        public static void HeroLevelCheck(Hero hero, int xp, bool offerBoons = true)
         {
             int levelsGained = Combat.ApplyExperience(hero, xp);
+
+            if (levelsGained == 0)
+            {
+                return;
+            }
+
+            // ApplyExperience has already advanced hero.level to its final value, so
+            // each banner has to count up from where the Hero started rather than
+            // reading the current level and printing the same number every time.
+            double levelBefore = hero.level - levelsGained;
+
+            if (!offerBoons)
+            {
+                AnsiConsole.Write(new Markup($"[yellow]You gain {xp} experience and reach level {hero.level}.[/]"));
+                Console.WriteLine();
+                Console.WriteLine();
+                HeroDamageCheck(hero);
+                return;
+            }
 
             for (int i = 0; i < levelsGained; i++)
             {
@@ -58,7 +80,7 @@ namespace Zemphas
                     .LeftAligned()
                     .Color(Color.Yellow));
 
-                AnsiConsole.Write(new Markup($"[yellow]You are now level {hero.level}.[/]"));
+                AnsiConsole.Write(new Markup($"[yellow]You are now level {levelBefore + i + 1}.[/]"));
                 Console.WriteLine();
                 Console.WriteLine();
 
