@@ -12,6 +12,11 @@ namespace Zemphas
 
         [JsonPropertyName("rooms")]
         public List<RoomData> Rooms { get; set; } = new List<RoomData>();
+
+        // Named lists of enemy types. A randomEncounter names the table it draws
+        // from, so the cave can stay survivable while the highlands are not.
+        [JsonPropertyName("encounterTables")]
+        public Dictionary<string, List<string>> EncounterTables { get; set; } = new Dictionary<string, List<string>>();
     }
 
     internal sealed class RoomData
@@ -41,9 +46,13 @@ namespace Zemphas
 
     internal sealed class RoomEventData
     {
-        // swordChoice | randomEncounter | encounter | boss | findSword | fountain
+        // swordChoice | randomEncounter | encounter | boss | findSword | fountain | rest
         [JsonPropertyName("kind")]
         public string Kind { get; set; } = "";
+
+        // Encounter table a randomEncounter draws from
+        [JsonPropertyName("table")]
+        public string? Table { get; set; }
 
         // Enemy type name for the encounter and boss kinds
         [JsonPropertyName("enemy")]

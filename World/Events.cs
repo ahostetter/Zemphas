@@ -5,6 +5,21 @@ namespace Zemphas
     // Room events that are not fights. Each returns false if the Hero died.
     internal static class Events
     {
+        // A safe place to stop. Without these a longer journey is pure attrition,
+        // since the only other healing is whatever potions happen to drop.
+        public static void Rest(Hero hero)
+        {
+            double before = hero.health;
+            double healed = hero.maxHealth * Modifiers.restHealAmount();
+            hero.health = Math.Min(hero.maxHealth, hero.health + healed);
+
+            AnsiConsole.Write(new Markup($"[green]You stop, and for a while nothing is trying to kill you.[/]"));
+            Console.WriteLine();
+            AnsiConsole.Write(new Markup($"[green]You recover {hero.health - before:F0} health, and stand at {hero.health:F0}.[/]"));
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+
         public static bool Fountain(Hero hero)
         {
             var choice = AnsiConsole.Prompt(

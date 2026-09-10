@@ -149,15 +149,52 @@
         public static double warlockDrainChance() { return .20; }
         public static double warlockDrainDamage() { return .65; }   // also heals the Warlock this much
 
+        // --- Cave enemies (early, forgiving) ----------------------------------
+        public static int goblinHealthLow() { return 900; }
+        public static int goblinHealthHigh() { return 1300; }
+        public static int goblinDamageLow() { return 110; }
+        public static int goblinDamageHigh() { return 170; }
+        public static double goblinAccuracy() { return .55; }
+        public static int goblinExperience() { return 45; }
+
+        public static int spiderHealthLow() { return 1100; }
+        public static int spiderHealthHigh() { return 1500; }
+        public static int spiderDamageLow() { return 140; }
+        public static int spiderDamageHigh() { return 200; }
+        public static double spiderAccuracy() { return .65; }
+        public static int spiderExperience() { return 55; }
+
+        // --- Highland enemies (late, punishing) -------------------------------
+        public static int trollHealthLow() { return 4900; }
+        public static int trollHealthHigh() { return 5800; }
+        public static int trollDamageLow() { return 300; }
+        public static int trollDamageHigh() { return 380; }
+        public static double trollAccuracy() { return .60; }
+        public static int trollExperience() { return 130; }
+        public static double trollRegenerateChance() { return .22; }
+        public static double trollRegenerateAmount() { return .10; }  // share of its starting health
+
+        public static int wraithHealthLow() { return 3150; }
+        public static int wraithHealthHigh() { return 3800; }
+        public static int wraithDamageLow() { return 345; }
+        public static int wraithDamageHigh() { return 430; }
+        public static double wraithAccuracy() { return .75; }
+        public static int wraithExperience() { return 140; }
+        public static double wraithChillChance() { return .20; }
+        public static double wraithChillDamage() { return 1.4; }
+
         // --- The Warlord (final boss) -----------------------------------------
-        public static int warlordHealthLow() { return 3600; }
-        public static int warlordHealthHigh() { return 4400; }
-        public static int warlordDamageLow() { return 235; }
-        public static int warlordDamageHigh() { return 315; }
+        public static int warlordHealthLow() { return 5800; }
+        public static int warlordHealthHigh() { return 6900; }
+        public static int warlordDamageLow() { return 375; }
+        public static int warlordDamageHigh() { return 465; }
         public static double warlordAccuracy() { return .60; }
         public static int warlordExperience() { return 250; }
         public static double warlordNovaChance() { return .16; }
         public static double warlordNovaDamage() { return 1.45; }
+
+        // Rest sites restore this share of max health
+        public static double restHealAmount() { return .35; }
 
         // The magic fountain
         public static double fountainStrength() { return 20; }

@@ -92,13 +92,37 @@ namespace Zemphas
                     }
                 }
 
-                if (room.Event != null && room.Event.Kind == "encounter" || room.Event != null && room.Event.Kind == "boss")
+                if (room.Event != null && (room.Event.Kind == "encounter" || room.Event.Kind == "boss"))
                 {
                     if (string.IsNullOrEmpty(room.Event.Enemy))
                     {
                         throw new InvalidDataException($"Room '{room.Id}' has a {room.Event.Kind} event with no enemy");
                     }
                     EnemyFor(room.Event.Enemy!); // throws if the name is unknown
+                }
+
+                if (room.Event != null && room.Event.Kind == "randomEncounter")
+                {
+                    if (string.IsNullOrEmpty(room.Event.Table))
+                    {
+                        throw new InvalidDataException($"Room '{room.Id}' has a randomEncounter with no table");
+                    }
+                    if (!world.EncounterTables.ContainsKey(room.Event.Table!))
+                    {
+                        throw new InvalidDataException($"Room '{room.Id}' draws from encounter table '{room.Event.Table}', which is not defined");
+                    }
+                }
+            }
+
+            foreach (KeyValuePair<string, List<string>> table in world.EncounterTables)
+            {
+                if (table.Value.Count == 0)
+                {
+                    throw new InvalidDataException($"Encounter table '{table.Key}' is empty");
+                }
+                foreach (string enemy in table.Value)
+                {
+                    EnemyFor(enemy); // throws if the name is unknown
                 }
             }
         }
@@ -199,8 +223,12 @@ namespace Zemphas
         {
             switch (name)
             {
+                case "Goblin": return new Goblin();
+                case "GiantSpider": return new GiantSpider();
                 case "Ogre": return new Ogre();
                 case "Warlock": return new Warlock();
+                case "Troll": return new Troll();
+                case "Wraith": return new Wraith();
                 case "Warlord": return new Warlord();
                 default: throw new InvalidDataException($"Unknown enemy '{name}' in the world file");
             }
@@ -232,7 +260,7 @@ namespace Zemphas
 
                 if (room.Event != null)
                 {
-                    if (!RunEvent(hero, room.Event, ref bossDefeated))
+                    if (!RunEvent(hero, room.Event, world, ref bossDefeated))
                     {
                         return RunOutcome.Died;
                     }
@@ -248,7 +276,7 @@ namespace Zemphas
         }
 
         // Returns false if the Hero died carrying out the event
-        private static bool RunEvent(Hero hero, RoomEventData roomEvent, ref bool bossDefeated)
+        private static bool RunEvent(Hero hero, RoomEventData roomEvent, WorldData world, ref bool bossDefeated)
         {
             switch (roomEvent.Kind)
             {
@@ -264,8 +292,15 @@ namespace Zemphas
                     return Events.Fountain(hero);
 
                 case "randomEncounter":
-                    Encounters.randomEcounter(hero);
+                {
+                    List<string> table = world.EncounterTables[roomEvent.Table!];
+                    Encounters.Encounter(hero, EnemyFor(table[Random.Shared.Next(table.Count)]));
                     return HeroManagement.HeroAliveCheck(hero);
+                }
+
+                case "rest":
+                    Events.Rest(hero);
+                    return true;
 
                 case "encounter":
                     Encounters.Encounter(hero, EnemyFor(roomEvent.Enemy!));

@@ -128,7 +128,7 @@ while (wantToPlay)
 
     {
         // Initiates the starting inventory
-        Inventory zemphasInventory = new Inventory(new Sword("Dull Blade", 20, "dagger", "None"), 0, 0, 3);
+        Inventory zemphasInventory = new Inventory(new Sword("Dull Blade", 20, "dagger", "None"), 0, 0, 6);
 
         // Loads the Hero with all of the base stats, and the hero stores the inventory
         Hero zemphas = new Hero(Modifiers.heroName(), Modifiers.maxHeroHealth(), Modifiers.heroHealth(), Modifiers.heroStrength(), Modifiers.heroCurrentDamage(),

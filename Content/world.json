@@ -1,5 +1,14 @@
-{
+﻿{
   "startRoom": "cave-wake",
+
+  "encounterTables": {
+    "cave": ["Goblin", "GiantSpider", "Goblin"],
+    "deepcave": ["GiantSpider", "Ogre", "Goblin"],
+    "forest": ["Ogre", "Warlock"],
+    "highlands": ["Troll", "Wraith", "Troll", "Warlock"],
+    "castle": ["Wraith", "Troll"]
+  },
+
   "rooms": [
     {
       "id": "cave-wake",
@@ -10,46 +19,100 @@
         "Inside you find swords that seemed to be enchanted!"
       ],
       "event": { "kind": "swordChoice" },
-      "exits": [
-        { "label": "Head deeper into the cave", "to": "pool:cave" }
-      ]
+      "exits": [{ "label": "Head deeper into the cave", "to": "pool:cave-upper" }]
     },
 
     {
       "id": "cave-narrows",
-      "pool": "cave",
+      "pool": "cave-upper",
       "text": [
         "The passage narrows until your shoulders scrape both walls.",
         "Something ahead of you decides it has been patient long enough."
       ],
-      "event": { "kind": "randomEncounter" },
-      "exits": [
-        { "label": "Press on", "to": "cave-junction" }
-      ]
+      "event": { "kind": "randomEncounter", "table": "cave" },
+      "exits": [{ "label": "Press on", "to": "cave-crossroads" }]
     },
     {
       "id": "cave-bones",
-      "pool": "cave",
+      "pool": "cave-upper",
       "text": [
         "The floor here is white with old bones, and none of them are small.",
         "You are not the first to walk this way, and something notices that you are."
       ],
-      "event": { "kind": "randomEncounter" },
-      "exits": [
-        { "label": "Press on", "to": "cave-junction" }
-      ]
+      "event": { "kind": "randomEncounter", "table": "cave" },
+      "exits": [{ "label": "Press on", "to": "cave-crossroads" }]
     },
     {
       "id": "cave-water",
-      "pool": "cave",
+      "pool": "cave-upper",
       "text": [
         "Black water fills the passage to your knees, cold enough to ache.",
         "The ripples ahead are not being made by you."
       ],
-      "event": { "kind": "randomEncounter" },
+      "event": { "kind": "randomEncounter", "table": "cave" },
+      "exits": [{ "label": "Press on", "to": "cave-crossroads" }]
+    },
+    {
+      "id": "cave-fungus",
+      "pool": "cave-upper",
+      "text": [
+        "Pale fungus lights the walls, and the air tastes of copper.",
+        "Something that has been eating well here turns to look at you."
+      ],
+      "event": { "kind": "randomEncounter", "table": "cave" },
+      "exits": [{ "label": "Press on", "to": "cave-crossroads" }]
+    },
+
+    {
+      "id": "cave-crossroads",
+      "text": [
+        "The passage opens into a chamber with more ways out than you would like.",
+        "One drops steeply into the dark. One climbs towards a draught of clean air."
+      ],
       "exits": [
-        { "label": "Press on", "to": "cave-junction" }
+        { "label": "Climb towards the air", "to": "cave-camp" },
+        { "label": "Descend into the dark", "to": "pool:cave-deep" }
       ]
+    },
+    {
+      "id": "cave-camp",
+      "text": [
+        "A dry shelf of rock, a ring of cold ashes, and no way in but the one you used.",
+        "Someone else stopped here once. They did not stay."
+      ],
+      "event": { "kind": "rest" },
+      "exits": [{ "label": "Move on", "to": "cave-junction" }]
+    },
+
+    {
+      "id": "cave-drop",
+      "pool": "cave-deep",
+      "text": [
+        "The floor falls away into a chamber that swallows the sound of your landing.",
+        "You are not alone down here, and whatever it is has been waiting."
+      ],
+      "event": { "kind": "randomEncounter", "table": "deepcave" },
+      "exits": [{ "label": "Find a way back up", "to": "cave-junction" }]
+    },
+    {
+      "id": "cave-hollow",
+      "pool": "cave-deep",
+      "text": [
+        "A hollow the size of a cathedral, and every surface of it moves slightly.",
+        "One piece of the dark detaches itself and comes for you."
+      ],
+      "event": { "kind": "randomEncounter", "table": "deepcave" },
+      "exits": [{ "label": "Find a way back up", "to": "cave-junction" }]
+    },
+    {
+      "id": "cave-chasm",
+      "pool": "cave-deep",
+      "text": [
+        "A chasm splits the floor, and the ledge around it is barely a ledge.",
+        "Something is already on the ledge with you."
+      ],
+      "event": { "kind": "randomEncounter", "table": "deepcave" },
+      "exits": [{ "label": "Find a way back up", "to": "cave-junction" }]
     },
 
     {
@@ -70,20 +133,14 @@
         "You head down the path of shimmering light.",
         "The glow is not treasure. It is something breathing."
       ],
-      "event": { "kind": "randomEncounter" },
-      "exits": [
-        { "label": "Search the alcove", "to": "cave-treasure" }
-      ]
+      "event": { "kind": "randomEncounter", "table": "deepcave" },
+      "exits": [{ "label": "Search the alcove", "to": "cave-treasure" }]
     },
     {
       "id": "cave-treasure",
-      "text": [
-        "Past the body, the shimmer resolves into a narrow alcove."
-      ],
+      "text": ["Past the body, the shimmer resolves into a narrow alcove."],
       "event": { "kind": "findSword" },
-      "exits": [
-        { "label": "Leave the cave", "to": "forest-edge" }
-      ]
+      "exits": [{ "label": "Leave the cave", "to": "forest-edge" }]
     },
     {
       "id": "cave-mouth",
@@ -91,9 +148,7 @@
         "You take the safe way, and the light widens ahead of you.",
         "You exit the cave into a forest."
       ],
-      "exits": [
-        { "label": "Walk into the forest", "to": "forest-edge" }
-      ]
+      "exits": [{ "label": "Walk into the forest", "to": "forest-edge" }]
     },
 
     {
@@ -108,7 +163,7 @@
       "exits": [
         {
           "label": "Sneak",
-          "to": "forest-fountain",
+          "to": "forest-track",
           "sneak": true,
           "failTo": "forest-ogre",
           "sneakSuccessText": "You were able to sneak past the Ogre",
@@ -121,10 +176,60 @@
       "id": "forest-ogre",
       "text": [],
       "event": { "kind": "encounter", "enemy": "Ogre" },
+      "exits": [{ "label": "Continue towards the castle", "to": "forest-track" }]
+    },
+    {
+      "id": "forest-track",
+      "text": [
+        "A track worn into the forest floor, going the way you want to go.",
+        "Tracks are made by something, and this one is still being used."
+      ],
       "exits": [
-        { "label": "Continue towards the castle", "to": "forest-fountain" }
+        { "label": "Follow the track", "to": "pool:forest" },
+        { "label": "Cut through the undergrowth", "to": "forest-thicket" }
       ]
     },
+
+    {
+      "id": "forest-clearing",
+      "pool": "forest",
+      "text": [
+        "The trees give out into a clearing that is far too quiet.",
+        "The quiet ends."
+      ],
+      "event": { "kind": "randomEncounter", "table": "forest" },
+      "exits": [{ "label": "Press on", "to": "forest-fountain" }]
+    },
+    {
+      "id": "forest-stones",
+      "pool": "forest",
+      "text": [
+        "Standing stones lean out of the moss, older than the forest around them.",
+        "Something has made a home in the middle of them."
+      ],
+      "event": { "kind": "randomEncounter", "table": "forest" },
+      "exits": [{ "label": "Press on", "to": "forest-fountain" }]
+    },
+    {
+      "id": "forest-hollow",
+      "pool": "forest",
+      "text": [
+        "A hollow where the canopy closes over completely and the light gives up.",
+        "You hear it before you see it."
+      ],
+      "event": { "kind": "randomEncounter", "table": "forest" },
+      "exits": [{ "label": "Press on", "to": "forest-fountain" }]
+    },
+    {
+      "id": "forest-thicket",
+      "text": [
+        "The undergrowth tears at you the whole way, and it takes hours.",
+        "But nothing in here is large enough to be a problem, and you come out",
+        "on the far side scratched, tired, and entirely alive."
+      ],
+      "exits": [{ "label": "Rejoin the path", "to": "forest-fountain" }]
+    },
+
     {
       "id": "forest-fountain",
       "text": [
@@ -133,9 +238,86 @@
         "You approach cautiously."
       ],
       "event": { "kind": "fountain" },
+      "exits": [{ "label": "Continue towards the castle", "to": "forest-camp" }]
+    },
+    {
+      "id": "forest-camp",
+      "text": [
+        "You make a fire where the trees thin, and watch the castle not get closer.",
+        "The ground begins to rise beyond here."
+      ],
+      "event": { "kind": "rest" },
+      "exits": [{ "label": "Climb into the highlands", "to": "highland-pass" }]
+    },
+
+    {
+      "id": "highland-pass",
+      "text": [
+        "The forest lets go of the slope and the wind takes over.",
+        "The castle sits above you now, and everything between here and it is bare rock."
+      ],
       "exits": [
-        { "label": "Continue towards the castle", "to": "castle-gate" }
+        { "label": "Take the high pass", "to": "pool:highlands" },
+        { "label": "Follow the gorge", "to": "highland-gorge" }
       ]
+    },
+    {
+      "id": "highland-cairn",
+      "pool": "highlands",
+      "text": [
+        "A cairn of stacked stones, each one carried up here by somebody.",
+        "Whatever they were marking is still here."
+      ],
+      "event": { "kind": "randomEncounter", "table": "highlands" },
+      "exits": [{ "label": "Climb on", "to": "highland-shrine" }]
+    },
+    {
+      "id": "highland-scree",
+      "pool": "highlands",
+      "text": [
+        "Loose scree slides under every step, and the drop beside you is long.",
+        "Something up the slope starts moving down it."
+      ],
+      "event": { "kind": "randomEncounter", "table": "highlands" },
+      "exits": [{ "label": "Climb on", "to": "highland-shrine" }]
+    },
+    {
+      "id": "highland-tarn",
+      "pool": "highlands",
+      "text": [
+        "A black tarn sits in a bowl of rock, flat and wrong and entirely still.",
+        "The stillness breaks."
+      ],
+      "event": { "kind": "randomEncounter", "table": "highlands" },
+      "exits": [{ "label": "Climb on", "to": "highland-shrine" }]
+    },
+    {
+      "id": "highland-gorge",
+      "text": [
+        "The gorge is sheltered, slower, and takes you the long way around.",
+        "You reach the far end unbothered, but the light has gone while you walked."
+      ],
+      "event": { "kind": "randomEncounter", "table": "highlands" },
+      "exits": [{ "label": "Climb towards the shrine", "to": "highland-shrine" }]
+    },
+
+    {
+      "id": "highland-shrine",
+      "text": [
+        "A shrine of black stone, roofless, facing the castle gates.",
+        "Someone built this to look at what you are about to walk into."
+      ],
+      "event": { "kind": "findSword" },
+      "exits": [{ "label": "Go on to the gates", "to": "highland-camp" }]
+    },
+    {
+      "id": "highland-camp",
+      "text": [
+        "The last shelter before the walls: a fold of rock, out of the wind.",
+        "There will not be another one."
+      ],
+      "event": { "kind": "rest" },
+      "exits": [{ "label": "Approach the castle", "to": "castle-gate" }]
     },
 
     {
@@ -144,9 +326,25 @@
         "The trees thin, and the castle stands over you at last.",
         "The gates are open. Nothing has tried to stop you, and that is worse."
       ],
-      "exits": [
-        { "label": "Enter the throne room", "to": "castle-throne" }
-      ]
+      "exits": [{ "label": "Enter the courtyard", "to": "castle-courtyard" }]
+    },
+    {
+      "id": "castle-courtyard",
+      "text": [
+        "The courtyard is full of armour that nobody is wearing any more.",
+        "Something in it is still standing up."
+      ],
+      "event": { "kind": "randomEncounter", "table": "castle" },
+      "exits": [{ "label": "Climb the stair", "to": "castle-hall" }]
+    },
+    {
+      "id": "castle-hall",
+      "text": [
+        "A hall long enough that you cannot see the end of it.",
+        "The doors at the far end are already opening for you."
+      ],
+      "event": { "kind": "randomEncounter", "table": "castle" },
+      "exits": [{ "label": "Go through the doors", "to": "castle-throne" }]
     },
     {
       "id": "castle-throne",
