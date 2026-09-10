@@ -4,8 +4,8 @@
     {
         public Ogre() : base(
             "Ogre",
-            Random.Shared.Next(1500, 2000),
-            Random.Shared.Next(200, 300),
+            Random.Shared.Next(Modifiers.ogreHealthLow(), Modifiers.ogreHealthHigh()),
+            Random.Shared.Next(Modifiers.ogreDamageLow(), Modifiers.ogreDamageHigh()),
             Modifiers.ogreAccuracy(),
             Modifiers.ogreExperience(),
             "You stand before a hulking giant of an Ogre",

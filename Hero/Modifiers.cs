@@ -52,13 +52,13 @@
 
         public static double heroCritChance()
         {
-            double critChance = .5;
+            double critChance = .2;
             return critChance;
         }
 
         public static double heroCritDamage()
         {
-            double critDamage = .2;
+            double critDamage = 1.0;
             return critDamage;
         }
 
@@ -92,6 +92,17 @@
             return levelScale;
         }
 
+        // Enemy stat ranges live here so difficulty can be tuned in one place
+        public static int ogreHealthLow() { return 3000; }
+        public static int ogreHealthHigh() { return 4000; }
+        public static int ogreDamageLow() { return 240; }
+        public static int ogreDamageHigh() { return 340; }
+
+        public static int warlockHealthLow() { return 1700; }
+        public static int warlockHealthHigh() { return 2200; }
+        public static int warlockDamageLow() { return 300; }
+        public static int warlockDamageHigh() { return 460; }
+
         public static int ogreExperience()
         {
             int ogreExperience = 75;
@@ -115,9 +126,18 @@
             double warlockAccuracy = .8;
             return warlockAccuracy;
         }
+        // Fraction of the Hero's evasiveness that applies to dodging blows in combat.
+        // Evasiveness is also used at full strength for escaping, so this keeps the
+        // in-combat dodge from making the Hero untouchable.
+        public static double dodgeScale()
+        {
+            double dodgeScale = .5;
+            return dodgeScale;
+        }
+
         public static int healthPotionStrength()
         {
-            int healthPotionStrength = 1600;
+            int healthPotionStrength = 700;
             return healthPotionStrength;
         }
     }

@@ -61,7 +61,8 @@ namespace Zemphas
         //Calculates the Hero's damage based on basedamage, Hero level, Sword damage, and Hero strength
         public static void HeroDamageCheck(Hero hero)
         {
-            hero.currentDamage = (hero.baseDamage + (hero.level * Modifiers.scaleLevel()) * hero.baseDamage) + hero.inventory.sword.damage + (hero.strength * Modifiers.scaleStrength());
+            // Combat owns the formula so the balance simulator and the game can never disagree
+            hero.currentDamage = Combat.CalculateHeroDamage(hero);
         }
 
         //If the hero has space in their inventory then randomly select an item
